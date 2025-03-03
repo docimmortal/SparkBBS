@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Hello</title>
+<link th:href="@{/css/styles.css}" rel="stylesheet" />
+<link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+
+</head>
+<body class="container">
+
+	<div th:if="${message == null or message.messageForum == null}" id="navbar" th:insert="~{fragments/nav :: navbar(0,1)}"></div>
+	<div th:if="${message != null and message.messageForum != null}" id="navbar" th:insert="~{fragments/nav :: navbar(${message.id - 1},${message.messageForum.id})}"></div>
+	
+	<th:block th:fragment="navbar" th:remove="tag"></th:block>
+
+	<!--  if no message, display this in h1 banner -->
+	<h1 th:if="${message == null}" class="w3-container w3-clear w3-theme w3-card">No More Messages</h1>
+
+	<!--  START if we have a message  -->
+	<h1 th:if="${message != null}" class="w3-container w3-clear w3-theme w3-card" th:text="${message.messageForum.name}"></h1>
+		<button id="postMsgButton" class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId')">Post Message</button>
+
+		<div class="hide" id="postMsg">
+		<form th:action="@{/saveMessage}" method="post" action="">
+			<input type="hidden" name="userDetailsId" th:value="${userDetailsId}" readonly>
+			<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}" readonly>
+			<input type="hidden" name="lastReadMessageId" th:value="${message.id}" readonly >
+			<label class="w3-theme" for="newTitle">Title</label><input id="newTitle" type="text" name="newTitle">
+			<textarea id="postmsgId"  class="replyMessage"  name="newMessageText"></textarea><br>
+			<button class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId')">Cancel</button>
+			<input class="w3-theme" type="submit" value="Save">
+		</form>
+		</div>
+
+
+		<div id="currentMessageId" th:if="${message != null}">
+			<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.userDetails.username}" readonly><br>
+		
+			<label class="w3-theme" for="title">Title</label><input type="text" name="title" id="title" th:value="${message.title}" readonly><br>
+	
+			<label class="w3-theme" for="timestamp">Date</label><input type="text" name="timestamp" id="timestamp" th:value="${#temporals.format(message.timestamp,'MM/dd/yyyy hh:mm a')}" readonly><br>
+	
+		
+			<textarea class="message mainMessage" th:field="${message.message}" name="messageText" readonly></textarea><br>
+		</div>
+		<!--  END if we have a message  -->
+		
+		<!-- 
+		<span th:with="count=1, previousValue=null">
+			<span th:each="reaction: ${message.reactions}">
+				<span th:if="${reaction != null}">WE GOT A REACTION!</span>
+				<span th:if="${previousValue != null}">NOT NULL!</span>
+				<span th:if="${previousValue == null}">NULL!</span>
+				<span th:if="${previousValue != null && previousValue != reaction.reactionType.unicode}">
+					<span th:utext="' '+${count} +' '+${reaction.reactionType.unicode}"></span>
+					<span th:with="count=1"></span>
+					<span>HERE</span>
+				</span>
+				<span th:if="${previousValue == null || previousValue == reaction.reactionType.unicode}">
+					<span th:with="count=${count + 1}"></span>
+				</span>
+				<span th:with="previousValue=${reaction.reactionType.unicode}"></span>
+				<span th:if="${previousValue != null}">NOT NULL!</span>
+				<span th:if="${previousValue == null}">STILL NULL!</span>>
+			</span>
+		</span>
+		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+
+		<button id="mainReplyButton" class="w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
+		
+		<div class="hide inner" id="replyToMain">
+			<h2>Reply</h2>
+			<form th:action="@{/saveReply}" method="post" action="">
+				<textarea id="mainReplyId"  class="replyMessage"  name="messageText"></textarea><br>
+				<button class="w3-theme-dark" onclick="toggle(event,'replyToMain','mainReplyButton')">Cancel</button>
+				<input class="w3-theme" type="submit" value="Save">
+			</form>
+		</div>
+		 -->
+		 
+	<!--  START Navigation buttons -->
+	<!-- <form th:action="@{/navigate}" method="post" action=""> -->
+	<div th:if="${message != null}">
+	<form th:action="@{/readMessage}" method="post" action="">
+		<input type="hidden" name="messageId" th:value="${message.id}">
+		<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}">
+		<input type="hidden" name="userDetailsId" th:value="${userDetailsId}">
+		
+		<span th:if="${prevForumId}">
+			<button id="prevForum" class="w3-theme" name="action" value="PrevForum" th:utext="${'&Lleftarrow; Prev Forum'}"></button>
+			<input type="hidden" name="prevForumId" th:value="${prevForumId}">
+			<input type="hidden" name="prevMesssageId" th:value="${prevMesssageId}">
+		</span>
+		
+		<span th:if="${hasPrev}">
+			<button id="prev" class="w3-theme" name="action" value="Prev" th:utext="${'&#9664; Prev'}"></button>
+		</span>
+		
+		<span th:if="${hasNext}">
+			<button id="next" class="w3-theme" name="action" value="Next" th:utext="${'Next &#9654;'}"></button>
+		</span>
+		
+		<span th:if="${nextForumId}">
+			<button id="nextForum" class="w3-theme" name="action" value="NextForum" th:utext="${'Next Forum &Rrightarrow;'}"></button>
+			<input type="hidden" name="nextForumId" th:value="${nextForumId}">
+			<input type="hidden" name="nextMessageId" th:value="${nextMessageId}">
+		</span>
+		
+	</form>
+	</div>
+	<!--  END Navigation buttons -->
+	
+	<div id="footer" th:insert="~{fragments/footer :: footer}"></div>
+	
+	<script>
+		function toggleReaction(event) {
+			const buttonId = event.target.id;
+			const button = document.getElementById(buttonId);
+			var id = buttonId.replace(/[a-z]/gi, ''); // remove letters from id
+			id = "reaction"+id;
+			const element = document.getElementById(id);
+			if (element.classList.contains('react')) {
+				element.classList.remove(...element.classList);
+				button.textContent='React';
+			} else {
+				element.classList.add('react');
+				element.classList.add('fa');
+				element.classList.add('fa-heart');
+				button.textContent='Remove reaction';
+			}
+		}
+		
+		function toggle(event,divId, buttonId, anotherId="") {
+  			var div = document.getElementById(divId);
+  			let div2="";
+  			if (anotherId != "") {
+  				div2=document.getElementById(anotherId);
+  			}
+  			var btn = document.getElementById(buttonId);
+  			var next = document.getElementById('next');
+  			if (div.classList.contains('hide')) {
+  				div.classList.remove('hide');
+  				if (div2!="") {
+  					div2.classList.add('hide');
+  				}
+  				btn.classList.add('hide');
+  				next.classList.add('hide');
+  			} else {
+  				div.classList.add('hide');
+  				if (div2 != "") {
+  					div2.classList.remove('hide');
+  				}
+  				btn.classList.remove('hide');
+  				next.classList.remove('hide');
+  			}
+  			event.preventDefault();
+		}
+	</script>
+
+</body>
+</html>

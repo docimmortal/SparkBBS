@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
+<head>
+<meta charset="ISO-8859-1">
+<title>Hello</title>
+<link th:href="@{/css/styles.css}" rel="stylesheet" />
+<link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+</head>
+<body class="container">
+	<div th:insert="fragments/navbar" id="navbar"></div>
+
+
+	<h1 class="w3-container w3-clear w3-theme w3-card" th:text="${message.forum.name}"></h1>
+
+	<form th:action="@{/navigate}" method="post" action="">
+		<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.author.username}" readonly><br>
+		
+		<label class="w3-theme" for="title">Title</label><input type="text" name="title" id="title" th:value="${message.title}" readonly><br>
+		
+		<textarea th:field="${message.message}" name="messageText" readonly></textarea>
+	
+		<input type="hidden" name="messageId" th:value="${message.id}">
+		<input type="hidden" name="messageForumId" th:value="${message.forum.id}">
+		
+		<button name="action" value="Next">Next</button>
+	</form>
+
+</body>
+</html>

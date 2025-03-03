@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
+<head>
+<meta charset="ISO-8859-1">
+<title>Error</title>
+</head>
+<body>
+	<h1>ERROR!</h1>
+	
+	<div th:utext="'&lt;!--'" th:remove="tag"></div>
+	<div th:utext="'Failed URL: ' +  ${url}" th:remove="tag">${url}</div>
+	<div th:utext="'--&gt;'" th:remove="tag"></div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
+<head>
+<meta charset="ISO-8859-1">
+<title>ADMIN: List Users</title>
+<link th:href="@{/css/styles.css}" rel="stylesheet" />
+<link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+</head>
+<body class="container">
+	<div th:insert="fragments/navbar" id="navbar"></div>
+
+
+	<h1 class="w3-container w3-clear w3-theme w3-card">Users</h1>
+
+	<div class="flex-container">
+		<div class="left">
+			<!--  nothing yet -->
+		</div>
+		<div>
+			<table>
+				<thead>
+				<tr class="w3-theme-d1">
+				<th>Username</th>
+				<th>Name</th>
+				<th>Email</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="user : ${users}" 
+ 					 th:style="${user.did %2 == 0}? 'even' : 'odd'" 
+  					 th:alt-title="${user.did %2 == 0}? 'even' : 'odd'">
+  					<td th:text="${user.username}"></td>
+					<td th:text="${user.firstName+' '+user.lastName}"></td>
+					<td th:text="${user.email}"></td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div> <!--  END flex -->
+	<h1>Add User</h1>
+	<form th:action="@{/addUser}" method="post" action="">
+		<label class="w3-theme bigLabel" for="firstName">First name</label> <input type="text" name="firstName"><br>
+		<label class="w3-theme bigLabel" for="lastName">Last name</label> <input type="text" name="lastName"><br>
+		<label class="w3-theme bigLabel" for="username">Username</label> <input type="text" name="username"><br>
+		<label class="w3-theme bigLabel" for="password">Password</label> <input type="text" name="password"><br>
+		<label class="w3-theme bigLabel" for="email">Email</label> <input type="text" name="email"><p/>
+		<input type="submit" value="Save">
+	</form>
+</body>
+</html>

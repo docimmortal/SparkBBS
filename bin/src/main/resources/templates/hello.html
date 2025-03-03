@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
+<head>
+<meta charset="ISO-8859-1">
+<title>Hello</title>
+<link th:href="@{/css/styles.css}" rel="stylesheet" />
+<link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+</head>
+<body class="container">
+	<div th:insert="fragments/navbar" id="navbar"></div>
+
+
+	<h1 class="w3-container w3-clear w3-theme w3-card">Profile</h1>
+
+	<div class="flex-container">
+		<div class="left">
+			<img th:src="@{'image/' + ${details.username}}" />
+		</div>
+		<div>
+			<label class="w3-theme" for="user">User</label><input
+				class="readonly" name="user" type="text" readonly
+				th:value="${details.username}">
+			<p />
+			<label class="w3-theme" for="name">Name</label><input
+				class="readonly" name="name" type="text" readonly
+				th:value="${details.firstName+' '+details.lastName}">
+			<p />
+			<label class="w3-theme" for="email">Email</label><input
+				class="readonly" name="email" type="text" readonly
+				th:value="${details.email}">
+			<p />
+			<label class="w3-theme" for="role">Role</label><input
+				class="readonly" name="user" type="text" readonly
+				th:value="${role}">
+			<p />
+		</div>
+	</div> <!--  END flex -->
+	<form th:action="@{/readMessage}" method="post" action="">
+		<input type="hidden" name="id" value="1">
+		<button name="action" value="Read Messages">Read Messages</button>
+	</form>
+	<form th:action="@{/getUsers}" method="post" action="">
+		<div sec:authorize="hasAuthority('ROLE_ADMIN')">
+			<button name="action" value="List Users">List Users</button>
+		</div>
+	</form>
+</body>
+</html>

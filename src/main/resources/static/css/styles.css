@@ -1,0 +1,98 @@
+@charset "ISO-8859-1";
+
+input {
+	padding: 4px;
+}
+
+label {
+	padding: 4px;
+	display: inline-block; 
+	width: 50px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	text-align: right;
+}
+
+input, button {
+    font-size: inherit;
+    padding: 0.2em;
+    margin: 0.1em 0.2em;
+    /* the following ensures they're all using the same box-model for rendering */
+    -moz-box-sizing: content-box; /* or `border-box` */
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+#navbar {
+  padding-bottom: 25px;
+}
+
+.menuOpts {
+  display: block;
+  padding-top: 0.35em;
+  padding-bottom: 0.625em;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  text-align: center;
+  float: left;
+  margin: 0 auto;
+}
+.bigLabel {
+	width: 75px;
+}
+
+.flex-container {
+	display: flex;
+}
+
+.flex-container > div {
+  margin: 10px;
+  padding: 20px;
+}
+
+.message {
+  width: 80%;
+  height: 200px;
+}
+
+.replyMessage {
+  width: 84%;
+  height: 100px;
+}
+
+.mainMessage {
+  margin-left: 60px;
+}
+
+.firstButton {
+  margin-left: 60px;
+}
+
+.inner {
+  margin-left: 60px;
+}
+
+.author {
+  width: 20%;
+}
+#title, #newTitle {
+  width: 40%;
+}
+#title, #newTitle, .author {
+  margin-bottom: 5px;
+}
+
+.hide {
+  display: none;
+}
+
+table, td, th {
+  border: 1px solid;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+td .odd {
+	background-color: grey;
+}

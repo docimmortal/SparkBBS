@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerfiles">
+<meta charset="UTF-8" />
+<link th:href="@{/css/styles.css}" rel="stylesheet" />
+<link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+</head>
+<body>
+	<div th:fragment="navbar (messageId,messageForumId)">
+		<nav class="navbar bg-dark navbar-dark navbar-expand-lg">
+			<div class="navbar-nav w-100 ml-auto" th:each="menu : ${menus}">
+				<form class="menuOpts" th:action="@{__${menu.url}__}" method="POST">
+					<span th:if="${menu.label == 'Message Board'}"> <input
+						id="nav-userDetailsId" name="userDetailsId" type="hidden"
+						th:value="${userDetailsId}"> <input id="nav-messageId"
+						name="messageId" type="hidden" th:value="${messageId}"> <input
+						id="nav-messageForumId" name="messageForumId" type="hidden"
+						th:value="${messageForumId}">
+					</span>
+					<button class="w3-theme" name="action" value="next">
+						<span th:utext="${menu.label}" /></span>
+					</button>
+				</form>
+			</div>
+			<form class="menuOpts" th:action="@{/logout}" method="POST">
+				<input class="w3-theme" type="submit" value="Sign Out">
+			</form>
+		</nav>
+	</div>
+</body>

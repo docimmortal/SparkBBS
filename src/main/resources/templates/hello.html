@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="https://www.thymeleaf.org" 
+	xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Hello</title>
+<link th:href="@{/css/styles.css}" rel="stylesheet" />
+<link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+</head>
+<body class="container">
+	<div id="navbar" th:insert="~{fragments/nav :: navbar(0,1)}"></div>
+	
+	<th:block th:fragment="navbar(0,1)" th:remove="tag"></th:block>
+
+	<h1 class="w3-container w3-clear w3-theme w3-card">Profile</h1>
+
+	<div class="flex-container">
+		<div class="left">
+			<img th:src="@{'image/' + ${details.username}}" />
+		</div>
+		<div>
+			<label class="w3-theme" for="user">User</label><input
+				class="readonly" name="user" type="text" readonly
+				th:value="${details.username}">
+			<p />
+			<label class="w3-theme" for="name">Name</label><input
+				class="readonly" name="name" type="text" readonly
+				th:value="${details.firstName+' '+details.lastName}">
+			<p />
+			<label class="w3-theme" for="email">Email</label><input
+				class="readonly" name="email" type="text" readonly
+				th:value="${details.email}">
+			<p />
+			<label class="w3-theme" for="role">Role</label><input
+				class="readonly" name="user" type="text" readonly
+				th:value="${role}">
+			<p />
+		</div>
+		<!-- thumbs up <p th:utext="${'&#128077;'}"></p>-->
+	</div> <!--  END flex -->
+	<div>Role(s): <span sec:authentication="principal.authorities"></span></div>
+	<div sec:authorize="isAuthenticated() && hasRole('ROLE_ADMIN')">
+		<form th:action="@{/getUsers}" method="post" action="">
+			<button class="w3-theme" name="action" value="List Users">List Users</button>
+		</form>
+	</div>
+	
+	<div id="footer" th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>
