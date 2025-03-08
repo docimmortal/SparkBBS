@@ -5,3 +5,7 @@ This project uses Spring Boot. The concept is to create a web-based old-school B
 I have not determined where this will be hosted, so the final database has not been determined (mySQL, Postgres, etc).
 
 Spring Security with bcrypt has been added to the project and two users have been prepopulated into the database.
+
+H2 has two users:
+Bob (password Bob)
+Joe Cool (password Joe Cool)
