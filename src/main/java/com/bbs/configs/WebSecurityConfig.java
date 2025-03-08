@@ -3,10 +3,13 @@ package com.bbs.configs;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,7 +23,8 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
-public class WebSecurityConfig extends WebMvcConfigurationSupport {
+@EnableWebSecurity
+public class WebSecurityConfig {
 	
 	private ApplicationContext ctx;
 	
@@ -34,7 +38,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.authorizeHttpRequests(authorize -> {	
-			//authorize.requestMatchers("/","/index","/loginPage").permitAll();
+			authorize.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
 			authorize.requestMatchers("/actuator/**","/h2-console/**").permitAll();
 			authorize.requestMatchers("/images/**").permitAll();
 			authorize.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
@@ -48,12 +52,6 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
 		http.headers(headers -> headers.disable());
 		return http.build();
 	}
-	
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry){ 
-            registry.addResourceHandler("/**")
-                 .addResourceLocations("classpath:/static/");
-    }
     
     // The rest is for Unicode
     @Bean

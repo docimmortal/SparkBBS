@@ -8,11 +8,8 @@
 <link th:href="@{/css/themes/green.css}" rel="stylesheet" />
 </head>
 <body class="container">
+	<div th:insert="fragments/navbar" id="navbar"></div>
 
-	<!-- <div th:insert="fragments/navbar" id="navbar"></div>-->
-	<div id="navbar" th:insert="~{fragments/nav :: navbar(0,1)}"></div>
-	
-	<th:block th:fragment="navbar" th:remove="tag"></th:block>
 
 	<h1 class="w3-container w3-clear w3-theme w3-card">Users</h1>
 
@@ -31,8 +28,8 @@
 				</thead>
 				<tbody>
 				<tr th:each="user : ${users}" 
- 					 th:style="${user.id %2 == 0}? 'even' : 'odd'" 
-  					 th:alt-title="${user.id %2 == 0}? 'even' : 'odd'">
+ 					 th:style="${user.did %2 == 0}? 'even' : 'odd'" 
+  					 th:alt-title="${user.did %2 == 0}? 'even' : 'odd'">
   					<td th:text="${user.username}"></td>
 					<td th:text="${user.firstName+' '+user.lastName}"></td>
 					<td th:text="${user.email}"></td></tr>
