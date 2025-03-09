@@ -55,4 +55,10 @@ public class DetailsServiceImpl implements DetailsService {
 		return repo.findAll();
 	}
 
+	@Override
+	public String findUsernameByDoorId(String doorId) {
+		String username = repo.findUsernameByDoorId(doorId);
+		return username != null? username:"";
+	}
+
 }

@@ -73,6 +73,20 @@ public class DetailsServiceImplTests {
 	}
 	
 	@Test
+	public void testGetPlayerNameByDoorIdFoundPlayer() {
+		String doorId="$2a$10$pR5VxQAnxZzq7HYqJlOBcOWlyuUeUInj3DS/G5EPmyL89q7wZwgga";
+		String username=service.findUsernameByDoorId(doorId);
+		System.out.println(username);
+	}
+	
+	@Test
+	public void testGetPlayerNameByDoorIdPlayerNotFound() {
+		String doorId="123";
+		String username=service.findUsernameByDoorId(doorId);
+		System.out.println(username);
+	}
+	
+	@Test
 	public void testFindAll() {
 		List<UserDetails> list = service.findAll();
 		assertEquals(2, list.size());
