@@ -41,7 +41,7 @@ public class MessageServiceTest {
 	
 	@BeforeEach
 	public void before() {
-		author = new UserDetails("amy","Amy","Jones","a.j@email.com");
+		author = new UserDetails("amy","123","Amy","Jones","a.j@email.com");
 		author=dService.save(author);
 		forum = new MessageForum("Boring","Boring stuff");
 		forum = mfService.save(forum);

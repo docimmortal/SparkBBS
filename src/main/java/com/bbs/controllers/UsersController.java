@@ -1,6 +1,8 @@
 package com.bbs.controllers;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,7 +48,14 @@ public class UsersController {
 		uService.save(user);
 		Authority authority = new Authority(username,"ROLE_USER");
 		aService.save(authority);
-		UserDetails details = new UserDetails(username, firstName, lastName, email);
+		
+		// Generate player ID
+		long now = System.currentTimeMillis();
+        Long number = new Random(now).nextLong();
+		String playerId=number.toString()+username.charAt(0)+firstName.charAt(0)+lastName.charAt(0)+email.charAt(0);
+		playerId =  passwordEncoder.encode(playerId).substring(8);
+		
+		UserDetails details = new UserDetails(username, playerId, firstName, lastName, email);
 		service.save(details);
 		List<UserDetails> users = service.findAll();
 		model.addAttribute("users", users);

@@ -4,10 +4,10 @@ INSERT INTO Authorities (username, authority) VALUES ('Joe Cool','ROLE_ADMIN');
 INSERT INTO Users (username, password, enabled) VALUES ('Joe Cool', '{bcrypt}$2a$10$VDNg03PY4cxlHy0KDculyu3Wb1z.c3z6/qGhfRgxXJJ9rEClIqhU2', '1');
 
 
-INSERT INTO User_Details (username, first_name, last_name, email, photo, last_login) values 
-	('Bob','Bob','Smith','bob.smith@email.com', FILE_READ('classpath:/static/images/bob.jpg'), current_timestamp());
-INSERT INTO User_Details (username, first_name, last_name, email, photo, last_login) values 
-	('Joe Cool','Joe','King','joe@king.com', FILE_READ('classpath:/static/images/joe.jpg'), current_timestamp());
+INSERT INTO User_Details (username, door_id, first_name, last_name, email, photo, last_login) values 
+	('Bob','$2a$10$THG95h3cpE0U0kZJT5Z/Lu6e/CJbmG.ieOjskApgCKcYegRN6Tp2O','Bob','Smith','bob.smith@email.com', FILE_READ('classpath:/static/images/bob.jpg'), current_timestamp());
+INSERT INTO User_Details (username, door_id, first_name, last_name, email, photo, last_login) values 
+	('Joe Cool','$2a$10$pR5VxQAnxZzq7HYqJlOBcOWlyuUeUInj3DS/G5EPmyL89q7wZwgga','Joe','King','joe@king.com', FILE_READ('classpath:/static/images/joe.jpg'), current_timestamp());
 	
 INSERT INTO Message_Forums(name, description) values ('General','Catch-all everyday chat.');
 INSERT INTO Message_Forums(name, description) values ('Get Creative!','Share your art!');

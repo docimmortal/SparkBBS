@@ -9,14 +9,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 
+import com.bbs.entites.User;
 import com.bbs.entites.UserDetails;
 import com.bbs.utilities.ImageUtilities;
 
@@ -30,6 +33,10 @@ public class DetailsServiceImplTests {
 	@Autowired
 	private DetailsService service;
 	
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Test
 	public void testfindByUsername() {
 		Optional<UserDetails> optional = service.findByUsername("Bob");
@@ -38,7 +45,7 @@ public class DetailsServiceImplTests {
 	
 	@Test
 	public void testSaveNewDetails() {
-		UserDetails details = new UserDetails("Amy","Amy","Jones","a.j@email.com");
+		UserDetails details = new UserDetails("Amy","123","Amy","Jones","a.j@email.com");
 		try {
 			BufferedImage image = ImageUtilities.getImageFromFile("none.jpg",true);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -50,6 +57,19 @@ public class DetailsServiceImplTests {
 			e.printStackTrace();
 		}
 		assertNotNull(details.getId());
+	}
+	
+	@Test
+	public void testPlayerIdEncryption() {
+		long now = System.currentTimeMillis();
+        Long number = new Random(now).nextLong();
+        String username="Joe Cool";
+        String firstName="Joe";
+        String lastName="Cool";
+        String email="joe@king.com";
+		String playerId=number.toString()+username.charAt(0)+firstName.charAt(0)+lastName.charAt(0)+email.charAt(0);
+		playerId =  passwordEncoder.encode(playerId).substring(8);
+		System.out.println(playerId);
 	}
 	
 	@Test

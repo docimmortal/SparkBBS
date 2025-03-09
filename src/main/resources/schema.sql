@@ -16,6 +16,7 @@ CREATE TABLE Users(
 CREATE TABLE User_Details(
 	id bigint NOT NULL AUTO_INCREMENT,
 	username VARCHAR(45) NOT NULL,
+	door_id VARCHAR(60) NOT NULL,
 	first_name VARCHAR(60) NOT NULL,
 	last_name VARCHAR(60) NOT NULL,
 	email VARCHAR(120) NOT NULL,

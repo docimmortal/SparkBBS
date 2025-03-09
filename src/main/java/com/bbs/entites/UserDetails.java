@@ -33,6 +33,9 @@ public class UserDetails implements Serializable{
 	@Column
 	private String username;
 	
+	@Column(name="door_id")
+	private String doorId;
+	
 	@Column(name="first_name")
 	private String firstName;
 	
@@ -52,11 +55,12 @@ public class UserDetails implements Serializable{
 	@OneToMany(mappedBy="userDetails",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages;
 
-	public UserDetails(String username, String firstName, String lastName, String email) {
+	public UserDetails(String username, String playerId, String firstName, String lastName, String email) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.doorId=playerId;
 		this.lastLogin = LocalDateTime.now();
 	}
 }
