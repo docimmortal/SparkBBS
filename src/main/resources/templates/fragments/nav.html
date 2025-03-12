@@ -13,7 +13,7 @@
 				<form class="menuOpts" th:action="@{__${menu.url}__}" method="POST">
 					<span th:if="${menu.label == 'Message Board'}"> <input
 						id="nav-userDetailsId" name="userDetailsId" type="hidden"
-						th:value="${userDetailsId}"> <input id="nav-messageId"
+						th:value="${#ctx.session.details.id}"> <input id="nav-messageId"
 						name="messageId" type="hidden" th:value="${messageId}"> <input
 						id="nav-messageForumId" name="messageForumId" type="hidden"
 						th:value="${messageForumId}">

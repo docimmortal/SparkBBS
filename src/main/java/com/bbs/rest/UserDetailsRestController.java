@@ -25,7 +25,6 @@ public class UserDetailsRestController {
 		if (jsonObject.has("doorId")) {
             String doorId = jsonObject.getString("doorId");
             username = detailsService.findUsernameByDoorId(doorId);
-            System.out.println("Name: " + username);
        }
 		return username;
 	}

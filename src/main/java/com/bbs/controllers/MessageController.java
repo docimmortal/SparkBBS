@@ -24,6 +24,7 @@ import com.bbs.utilities.MenuUtilities;
 import com.bbs.utilities.MessageUtilities;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
@@ -49,7 +50,7 @@ public class MessageController {
 			@RequestParam(required = false, defaultValue="") String nextMessageId,
 			@RequestParam(required = false, defaultValue="") String prevForumId,
 			@RequestParam(required = false, defaultValue="") String prevMessageId,
-			Model model, HttpServletRequest request) {
+			Model model, HttpServletRequest request, HttpSession session) {
 		
 		// Cleansing data, removing non-numerics from String
 		messageId=messageId.replaceAll("[^0-9]", "");
@@ -122,7 +123,7 @@ public class MessageController {
 			@RequestParam(required = true) String newTitle,
 			@RequestParam(required = true) String newMessageText,
 			@RequestParam(required = true) String lastReadMessageId,
-			Model model, HttpServletRequest request) {
+			Model model, HttpServletRequest request, HttpSession session) {
 		System.out.println("userDetailsId: "+userDetailsId);
 		System.out.println("messageForumId: "+messageForumId);
 		System.out.println("lastReadMessageId: "+lastReadMessageId);

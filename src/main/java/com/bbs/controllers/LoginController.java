@@ -19,6 +19,8 @@ import com.bbs.enums.ReactionType;
 import com.bbs.services.DetailsService;
 import com.bbs.utilities.MenuUtilities;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class LoginController {
 
@@ -37,7 +39,7 @@ public class LoginController {
 
 	// Landing Page
 	@GetMapping("/hello")
-	public String hello(Model model) throws IOException {
+	public String hello(Model model, HttpSession session) throws IOException {
 		String username = "Unknown";
 		UserDetails details = new UserDetails();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,7 +57,7 @@ public class LoginController {
 			model.addAttribute("userDetailsId",details.getId());
 		}
 
-		model.addAttribute("details", details);
+		session.setAttribute("details", details);
 		String unicode=ReactionType.FUNNY.getUnicode();
 		model.addAttribute("unicode",unicode);
 

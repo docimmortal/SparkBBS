@@ -19,20 +19,20 @@
 
 	<div class="flex-container">
 		<div class="left">
-			<img th:src="@{'image/' + ${details.username}}" />
+			<img th:src="@{'image/' + ${#ctx.session.details.username}}" />
 		</div>
 		<div>
 			<label class="w3-theme" for="user">User</label><input
 				class="readonly" name="user" type="text" readonly
-				th:value="${details.username}">
+				th:value="${#ctx.session.details.username}">
 			<p />
 			<label class="w3-theme" for="name">Name</label><input
 				class="readonly" name="name" type="text" readonly
-				th:value="${details.firstName+' '+details.lastName}">
+				th:value="${#ctx.session.details.firstName+' '+#ctx.session.details.lastName}">
 			<p />
 			<label class="w3-theme" for="email">Email</label><input
 				class="readonly" name="email" type="text" readonly
-				th:value="${details.email}">
+				th:value="${#ctx.session.details.email}">
 			<p />
 			<label class="w3-theme" for="role">Role</label><input
 				class="readonly" name="user" type="text" readonly

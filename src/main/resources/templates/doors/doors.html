@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link th:href="@{/css/styles.css}" rel="stylesheet" />
+<link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+<title>Doors</title>
+</head>
+<body class="container">
+
+	<div id="navbar" th:insert="~{fragments/nav :: navbar(0,1)}"></div>
+	
+	<th:block th:fragment="navbar" th:remove="tag"></th:block>
+
+	<div class="navbar-nav w-100 ml-auto" th:each="dooritem : ${doorlist}">
+		<form class="menuOpts" th:action="@{__${dooritem.url}__}" method="POST"
+			action="">
+			<input name="doorId" type="hidden" th:value="${#ctx.session.details.doorId}">
+			<button name="action" value="next">
+				<span th:utext="${dooritem.label}" /></span>
+			</button>
+		</form>
+	</div>
+	
+	<div id="footer" th:insert="~{fragments/footer :: footer}"></div>
+	
+</body>
+</html>
