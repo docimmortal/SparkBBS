@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
 
 public interface MessageForumService {

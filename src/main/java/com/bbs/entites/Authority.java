@@ -2,8 +2,6 @@ package com.bbs.entites;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

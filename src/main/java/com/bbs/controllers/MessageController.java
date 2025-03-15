@@ -5,17 +5,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
-import com.bbs.entites.UserDetails;
+import com.bbs.entites.BBSUserDetails;
 import com.bbs.services.DetailsService;
 import com.bbs.services.LastReadMessageServiceImpl;
 import com.bbs.services.MessageForumService;
@@ -141,7 +138,7 @@ public class MessageController {
 		
 		if (!messageForumId.isBlank() && !userDetailsId.isBlank() && !newMessageText.isBlank() &&!newTitle.isBlank()) {			
 			Optional<MessageForum> forum = mfService.findById(new BigInteger(messageForumId));
-			Optional<UserDetails> user = udService.findById(new BigInteger(userDetailsId));
+			Optional<BBSUserDetails> user = udService.findById(new BigInteger(userDetailsId));
 		
 			if (forum.isPresent() && user.isPresent()) {
 					Message message = new Message();
@@ -149,7 +146,7 @@ public class MessageController {
 					message.setTimestamp(LocalDateTime.now());
 					message.setTitle(newTitle);
 					message.setMessageForum(forum.get());
-					message.setUserDetails(user.get());
+					message.setBbsUserDetails(user.get());
 					message=mService.save(message);
 
 					model.addAttribute("userDetailsId",userDetailsId);

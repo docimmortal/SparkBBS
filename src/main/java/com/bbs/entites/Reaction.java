@@ -34,7 +34,7 @@ public class Reaction  implements Serializable {
 	private ReactionType reactionType;
 	
 	@ManyToOne
-	private UserDetails userDetails;
+	private BBSUserDetails userDetails;
 	
 	@ManyToOne
 	private Message message;

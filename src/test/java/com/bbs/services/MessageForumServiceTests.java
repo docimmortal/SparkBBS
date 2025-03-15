@@ -41,7 +41,7 @@ public class MessageForumServiceTests {
 		assertNotNull(message);
 		assertNotNull(message.getTitle());
 		assertNotNull(message.getMessage());
-		assertNotNull(message.getUserDetails());
+		assertNotNull(message.getBbsUserDetails());
 		
 		// Forum 2, has 1 message
 		MessageForum forum2 = forums.get(1);

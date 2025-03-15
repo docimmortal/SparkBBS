@@ -2,6 +2,7 @@ package com.bbs.configs;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.thymeleaf.spring6.ISpringWebFluxTemplateEngine;
 import org.thymeleaf.spring6.SpringWebFluxTemplateEngine;
@@ -20,11 +22,16 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import com.bbs.filters.JwtFilter;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 	
 	private ApplicationContext ctx;
+	
+	@Autowired
+	JwtFilter jwtFilter;
 	
 	@Bean
 	protected AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -55,6 +62,7 @@ public class WebSecurityConfig {
 		http.logout(logout -> logout.permitAll());
 		http.formLogin(form -> form.loginPage("/loginPage").defaultSuccessUrl("/hello", true).permitAll());
 		http.headers(headers -> headers.disable());
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
     

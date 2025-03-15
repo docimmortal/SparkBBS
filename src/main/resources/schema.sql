@@ -13,7 +13,7 @@ CREATE TABLE Users(
 	PRIMARY KEY(id)
 );
 
-CREATE TABLE User_Details(
+CREATE TABLE BBS_User_Details(
 	id bigint NOT NULL AUTO_INCREMENT,
 	username VARCHAR(45) NOT NULL,
 	door_id VARCHAR(60) NOT NULL,
@@ -36,21 +36,21 @@ CREATE TABLE Messages(
 	id bigint NOT NULL AUTO_INCREMENT,
 	title VARCHAR(100) NOT NULL,
 	message CLOB,
-	user_details_id bigint NOT NULL,
+	bbs_user_details_id bigint NOT NULL,
 	message_forum_id bigint NOT NULL,
 	timestamp TIMESTAMP,
 	PRIMARY KEY(id),
-	foreign key(user_details_id) references User_Details(id),
+	foreign key(bbs_user_details_id) references BBS_User_Details(id),
 	foreign key(message_forum_id) references Message_Forums(id)
 );
 
 CREATE TABLE Last_Read_Messages(
 	id bigint NOT NULL AUTO_INCREMENT,
 	PRIMARY KEY(id),
-	user_details_id bigint NOT NULL,
+	bbs_user_details_id bigint NOT NULL,
 	message_forum_id bigint NOT NULL,
 	message_id bigint NOT NULL,
-	foreign key(user_details_id) references User_Details(id),
+	foreign key(bbs_user_details_id) references BBS_User_Details(id),
 	foreign key(message_forum_id) references Message_Forums(id),
 	foreign key(message_id) references Messages(id)
 );

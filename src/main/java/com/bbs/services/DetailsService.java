@@ -4,13 +4,16 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import com.bbs.entites.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.bbs.entites.BBSUserDetails;
 
 public interface DetailsService {
 
-	public Optional<UserDetails> findByUsername(String username);
+	public Optional<BBSUserDetails> findByUsername(String username);
+	public UserDetails loadUserByUsername(String username);
 	public String findUsernameByDoorId(String doorId);
-	public Optional<UserDetails> findById(BigInteger id);
-	public UserDetails save(UserDetails details);
-	public List<UserDetails> findAll();
+	public Optional<BBSUserDetails> findById(BigInteger id);
+	public BBSUserDetails save(BBSUserDetails details);
+	public List<BBSUserDetails> findAll();
 }

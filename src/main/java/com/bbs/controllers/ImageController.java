@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.bbs.entites.UserDetails;
+import com.bbs.entites.BBSUserDetails;
 import com.bbs.services.DetailsService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,8 +27,8 @@ public class ImageController {
 	                               HttpServletResponse response) throws IOException {
 		response.setContentType("image/jpeg"); // Or whatever format you wanna use
 		System.out.println("USERNAME: "+username);
-		Optional<UserDetails> optional = service.findByUsername(username);
-		UserDetails details = optional.get();
+		Optional<BBSUserDetails> optional = service.findByUsername(username);
+		BBSUserDetails details = optional.get();
 		InputStream is = new ByteArrayInputStream(details.getPhoto());
 		IOUtils.copy(is, response.getOutputStream());
 	}

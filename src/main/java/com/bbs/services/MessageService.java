@@ -3,8 +3,6 @@ package com.bbs.services;
 import java.math.BigInteger;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Query;
-
 import com.bbs.entites.Message;
 
 public interface MessageService {

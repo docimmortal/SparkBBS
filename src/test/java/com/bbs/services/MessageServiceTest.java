@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import com.bbs.entites.UserDetails;
-import com.bbs.enums.ReactionType;
+import com.bbs.entites.BBSUserDetails;
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
-import com.bbs.entites.Reaction;
 
 import jakarta.transaction.Transactional;
 
@@ -36,12 +33,12 @@ public class MessageServiceTest {
 	@Autowired
 	private MessageForumService mfService;
 	
-	private UserDetails author;
+	private BBSUserDetails author;
 	private MessageForum forum;
 	
 	@BeforeEach
 	public void before() {
-		author = new UserDetails("amy","123","Amy","Jones","a.j@email.com");
+		author = new BBSUserDetails("amy","123","Amy","Jones","a.j@email.com");
 		author=dService.save(author);
 		forum = new MessageForum("Boring","Boring stuff");
 		forum = mfService.save(forum);
@@ -83,7 +80,7 @@ public class MessageServiceTest {
 		MessageForum forum = message.getMessageForum();
 		assertNotNull(forum.getId());
 		System.out.println("MFID: "+forum.getId());
-		UserDetails details = message.getUserDetails();
+		BBSUserDetails details = message.getBbsUserDetails();
 		assertNotNull(details.getId());
 		System.out.println("DID: "+details.getId());
 	}
@@ -91,9 +88,9 @@ public class MessageServiceTest {
 	@Test
 	@Transactional
 	public void testSaveToAutopopulatedData() {
-		Optional<UserDetails> dOptional = dService.findByUsername("Bob");
+		Optional<BBSUserDetails> dOptional = dService.findByUsername("Bob");
 		assertTrue(dOptional.isPresent());
-		UserDetails author1 = dOptional.get();
+		BBSUserDetails author1 = dOptional.get();
 		
 		Optional<Message> optional = service.findById(BigInteger.valueOf(1));
 		assertTrue(optional.isPresent());
@@ -106,7 +103,7 @@ public class MessageServiceTest {
 		message = service.save(message);
 		assertNotNull(message.getId());
 		assertEquals(BigInteger.valueOf(5), message.getId());
-		UserDetails details = message.getUserDetails();
+		BBSUserDetails details = message.getBbsUserDetails();
 		assertEquals(BigInteger.valueOf(1), details.getId());
 		MessageForum mForum = message.getMessageForum();
 		assertEquals(BigInteger.valueOf(1), mForum.getId());
@@ -116,7 +113,7 @@ public class MessageServiceTest {
 		assertTrue(optional3.isPresent());
 		message = optional3.get();
 		assertEquals(BigInteger.valueOf(3), message.getId());
-		details = message.getUserDetails();
+		details = message.getBbsUserDetails();
 		assertNotNull(details);
 		MessageForum forum = message.getMessageForum();
 		assertNotNull(forum);
@@ -132,7 +129,7 @@ public class MessageServiceTest {
 		assertEquals("Hello!",message.getTitle());
 		assertEquals("This is a test message.", message.getMessage());
 		// I guess there is a database issue because testSaveToAutopopulatedData works.
-		UserDetails detail = message.getUserDetails();
+		BBSUserDetails detail = message.getBbsUserDetails();
 		assertNotNull(detail);
 		MessageForum forum = message.getMessageForum();
 		assertNotNull(forum);

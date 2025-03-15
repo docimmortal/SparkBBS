@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="User_Details")
+@Table(name="BBS_User_Details")
 @Getter @Setter @NoArgsConstructor 
-public class UserDetails implements Serializable{
+public class BBSUserDetails implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -52,10 +52,10 @@ public class UserDetails implements Serializable{
 	@Column(name="last_login")
 	private LocalDateTime lastLogin;
 	
-	@OneToMany(mappedBy="userDetails",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="bbsUserDetails",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages;
 
-	public UserDetails(String username, String playerId, String firstName, String lastName, String email) {
+	public BBSUserDetails(String username, String playerId, String firstName, String lastName, String email) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;

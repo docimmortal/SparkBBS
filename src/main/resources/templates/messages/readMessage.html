@@ -37,7 +37,7 @@
 
 
 		<div id="currentMessageId" th:if="${message != null}">
-			<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.userDetails.username}" readonly><br>
+			<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.bbsUserDetails.username}" readonly><br>
 		
 			<label class="w3-theme" for="title">Title</label><input type="text" name="title" id="title" th:value="${message.title}" readonly><br>
 	

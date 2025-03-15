@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.bbs.entites.UserDetails;
+import com.bbs.entites.BBSUserDetails;
 
 import jakarta.transaction.Transactional;
 
@@ -25,13 +23,13 @@ public class DetailsRepositoryTests {
 	
 	@Test
 	public void testFindAll() {
-		List<UserDetails> details = repo.findAll();
+		List<BBSUserDetails> details = repo.findAll();
 		assertEquals(2, details.size());
 	}
 	
 	@Test
 	public void testFindByUsername() {
-		Optional<UserDetails> optional = repo.findOptionalByUsername("Bob");
+		Optional<BBSUserDetails> optional = repo.findOptionalByUsername("Bob");
 		assertTrue(optional.isPresent());
 	}
 }

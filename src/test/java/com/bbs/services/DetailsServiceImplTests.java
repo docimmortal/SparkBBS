@@ -19,8 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 
-import com.bbs.entites.User;
-import com.bbs.entites.UserDetails;
+import com.bbs.entites.BBSUserDetails;
 import com.bbs.utilities.ImageUtilities;
 
 import jakarta.transaction.Transactional;
@@ -39,13 +38,13 @@ public class DetailsServiceImplTests {
 	
 	@Test
 	public void testfindByUsername() {
-		Optional<UserDetails> optional = service.findByUsername("Bob");
+		Optional<BBSUserDetails> optional = service.findByUsername("Bob");
 		assertTrue(optional.isPresent());
 	}
 	
 	@Test
 	public void testSaveNewDetails() {
-		UserDetails details = new UserDetails("Amy","123","Amy","Jones","a.j@email.com");
+		BBSUserDetails details = new BBSUserDetails("Amy","123","Amy","Jones","a.j@email.com");
 		try {
 			BufferedImage image = ImageUtilities.getImageFromFile("none.jpg",true);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -88,7 +87,7 @@ public class DetailsServiceImplTests {
 	
 	@Test
 	public void testFindAll() {
-		List<UserDetails> list = service.findAll();
+		List<BBSUserDetails> list = service.findAll();
 		assertEquals(2, list.size());
 	}
 }

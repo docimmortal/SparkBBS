@@ -10,4 +10,5 @@ import com.bbs.entites.User;
 @Repository
 public interface UsersRepository extends JpaRepository<User, BigInteger> {
 
+	User findByUsername(String username);
 }
