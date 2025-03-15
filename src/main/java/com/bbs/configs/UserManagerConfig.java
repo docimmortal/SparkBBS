@@ -19,12 +19,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class UserManagerConfig{
 	
 	@Bean
-	public UserDetailsService userDetailService(DataSource dataSource) {
+	protected UserDetailsService userDetailService(DataSource dataSource) {
 		return new JdbcUserDetailsManager(dataSource);
 	}
 	
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	protected PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 	

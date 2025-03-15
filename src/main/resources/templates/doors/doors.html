@@ -17,6 +17,8 @@
 		<form class="menuOpts" th:action="@{__${dooritem.url}__}" method="POST"
 			action="">
 			<input name="doorId" type="hidden" th:value="${#ctx.session.details.doorId}">
+			<input name="sessionId" type="hidden" readonly th:value="${#ctx.session.sessionId}">
+			<input name="token" type="hidden" readonly th:value="${token}">
 			<button name="action" value="next">
 				<span th:utext="${dooritem.label}" /></span>
 			</button>
