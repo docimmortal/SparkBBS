@@ -30,6 +30,5 @@ public class UsersServiceTests {
 		User user = new User("fred", passwordEncoder.encode("Pass123"), true);
 		System.out.println(passwordEncoder.encode("Joe Cool"));
 		user=service.save(user);
-		assertEquals(BigInteger.valueOf(3), user.getId());
 	}
 }

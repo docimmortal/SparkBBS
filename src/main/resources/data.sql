@@ -1,7 +1,7 @@
-INSERT INTO Authorities (username, authority) VALUES ('Bob','ROLE_USER');
 INSERT INTO Users (username, password, enabled) VALUES ('Bob', '{bcrypt}$2a$10$7hssGCuqK0oYxQFMXiL8fOljpIFaKVRrK1F0E/HNb2IlIPabv18NO', '1');
-INSERT INTO Authorities (username, authority) VALUES ('Joe Cool','ROLE_ADMIN');
+INSERT INTO Authorities (username, authority) VALUES ('Bob','ROLE_USER');
 INSERT INTO Users (username, password, enabled) VALUES ('Joe Cool', '{bcrypt}$2a$10$VDNg03PY4cxlHy0KDculyu3Wb1z.c3z6/qGhfRgxXJJ9rEClIqhU2', '1');
+INSERT INTO Authorities (username, authority) VALUES ('Joe Cool','ROLE_ADMIN');
 
 
 INSERT INTO BBS_User_Details (username, door_id, first_name, last_name, email, photo, last_login) values 

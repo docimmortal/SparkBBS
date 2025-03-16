@@ -1,21 +1,28 @@
-CREATE TABLE Authorities(
-	id bigint NOT NULL AUTO_INCREMENT,
-	username VARCHAR(45) NOT NULL,
-	authority VARCHAR(45) NOT NULL,
-	PRIMARY KEY(id)
-);
-
 CREATE TABLE Users(
-	id bigint NOT NULL AUTO_INCREMENT,
-	username VARCHAR(45) NOT NULL,
+	username VARCHAR(50) NOT NULL,
 	password VARCHAR(256) NOT NULL,
 	enabled tinyint NOT NULL,
-	PRIMARY KEY(id)
+	PRIMARY KEY(username)
+);
+
+CREATE TABLE Authorities(
+	username VARCHAR(50) NOT NULL,
+	authority VARCHAR(50) NOT NULL,
+	foreign key (username) references Users(username)
+);
+
+create unique index ix_auth_username on authorities (username,authority);
+
+create table persistent_logins (
+	username varchar(64) not null,
+	series varchar(64) primary key,
+	token varchar(64) not null,
+	last_used timestamp not null
 );
 
 CREATE TABLE BBS_User_Details(
 	id bigint NOT NULL AUTO_INCREMENT,
-	username VARCHAR(45) NOT NULL,
+	username VARCHAR(50) NOT NULL,
 	door_id VARCHAR(60) NOT NULL,
 	first_name VARCHAR(60) NOT NULL,
 	last_name VARCHAR(60) NOT NULL,

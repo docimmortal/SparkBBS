@@ -25,6 +25,5 @@ public class AuthoritiesServiceTests {
 	public void testSave() {
 		Authority authority = new Authority("fred", "ROLE_USER");
 		authority=service.save(authority);
-		assertEquals(BigInteger.valueOf(3), authority.getId());
 	}
 }
