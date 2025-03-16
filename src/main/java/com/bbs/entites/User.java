@@ -1,10 +1,13 @@
 package com.bbs.entites;
 
 import java.io.Serializable;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +28,9 @@ public class User implements Serializable {
 	
 	@Column
     private boolean enabled;
+	
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Authority> authorities;
 
     public User(String username, String password, boolean enabled) {
 		super();

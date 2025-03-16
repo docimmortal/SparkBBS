@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ public class UsersController {
 	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping("/getUsers")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String displayUsers(Model model) {
 		List<BBSUserDetails> users = service.findAll();
 		model.addAttribute("users", users);
@@ -40,6 +42,7 @@ public class UsersController {
 	}
 	
 	@PostMapping("/addUser")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String addUser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String username,
 			@RequestParam String password, @RequestParam String email, Model model) {
 		System.out.println("Adding user...");
