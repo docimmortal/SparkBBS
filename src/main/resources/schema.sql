@@ -61,3 +61,12 @@ CREATE TABLE Last_Read_Messages(
 	foreign key(message_forum_id) references Message_Forums(id),
 	foreign key(message_id) references Messages(id)
 );
+
+CREATE TABLE Email_Validations(
+	id bigint NOT NULL AUTO_INCREMENT,
+	PRIMARY KEY(id),
+	email VARCHAR(120) NOT NULL,
+	code_key VARCHAR(10),
+	date_sent TIMESTAMP,
+	validated tinyint NOT NULL
+);

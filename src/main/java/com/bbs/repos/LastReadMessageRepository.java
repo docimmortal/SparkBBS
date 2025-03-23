@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.bbs.entites.LastReadMessage;
 
 @Repository
-public interface LastReadMessageRepo extends JpaRepository<LastReadMessage, BigInteger>{
+public interface LastReadMessageRepository extends JpaRepository<LastReadMessage, BigInteger>{
 
 	@Query(value=
 			"""
