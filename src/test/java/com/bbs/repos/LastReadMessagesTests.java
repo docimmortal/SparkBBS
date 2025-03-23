@@ -17,7 +17,7 @@ import jakarta.transaction.Transactional;
 public class LastReadMessagesTests {
 
 	@Autowired
-	private LastReadMessageRepo repo;
+	private LastReadMessageRepository repo;
 	
 	@Test
 	public void testQuery() {

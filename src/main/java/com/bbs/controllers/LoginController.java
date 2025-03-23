@@ -1,9 +1,6 @@
 package com.bbs.controllers;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.bbs.entites.UserDetails;
+import com.bbs.entites.BBSUserDetails;
 import com.bbs.enums.ReactionType;
 import com.bbs.services.DetailsService;
 import com.bbs.utilities.MenuUtilities;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -37,9 +36,9 @@ public class LoginController {
 
 	// Landing Page
 	@GetMapping("/hello")
-	public String hello(Model model) throws IOException {
+	public String hello(Model model, HttpSession session) throws IOException {
 		String username = "Unknown";
-		UserDetails details = new UserDetails();
+		BBSUserDetails details = new BBSUserDetails();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 			username = authentication.getName();
@@ -48,14 +47,14 @@ public class LoginController {
 			role=role.substring(0, role.length()-1);
 			System.out.println(role);
 			model.addAttribute("role",role);
-			Optional<UserDetails> optional = service.findByUsername(username);
+			Optional<BBSUserDetails> optional = service.findByUsername(username);
 			details = optional.get();
 
 			System.out.println("Hello user ID: "+details.getId());
 			model.addAttribute("userDetailsId",details.getId());
 		}
 
-		model.addAttribute("details", details);
+		session.setAttribute("details", details);
 		String unicode=ReactionType.FUNNY.getUnicode();
 		model.addAttribute("unicode",unicode);
 

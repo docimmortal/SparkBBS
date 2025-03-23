@@ -25,7 +25,7 @@
 
 		<div class="hide" id="postMsg">
 		<form th:action="@{/saveMessage}" method="post" action="">
-			<input type="hidden" name="userDetailsId" th:value="${userDetailsId}" readonly>
+			<input type="hidden" name="userDetailsId" th:value="${#ctx.session.details.id}" readonly>
 			<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}" readonly>
 			<input type="hidden" name="lastReadMessageId" th:value="${message.id}" readonly >
 			<label class="w3-theme" for="newTitle">Title</label><input id="newTitle" type="text" name="newTitle">
@@ -37,7 +37,7 @@
 
 
 		<div id="currentMessageId" th:if="${message != null}">
-			<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.userDetails.username}" readonly><br>
+			<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.bbsUserDetails.username}" readonly><br>
 		
 			<label class="w3-theme" for="title">Title</label><input type="text" name="title" id="title" th:value="${message.title}" readonly><br>
 	
@@ -87,7 +87,7 @@
 	<form th:action="@{/readMessage}" method="post" action="">
 		<input type="hidden" name="messageId" th:value="${message.id}">
 		<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}">
-		<input type="hidden" name="userDetailsId" th:value="${userDetailsId}">
+		<input type="hidden" name="userDetailsId" th:value="${#ctx.session.details.id}">
 		
 		<span th:if="${prevForumId}">
 			<button id="prevForum" class="w3-theme" name="action" value="PrevForum" th:utext="${'&Lleftarrow; Prev Forum'}"></button>

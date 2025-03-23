@@ -7,20 +7,22 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.thymeleaf.spring6.ISpringWebFluxTemplateEngine;
 import org.thymeleaf.spring6.SpringWebFluxTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+
+import com.bbs.filters.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -28,17 +30,27 @@ public class WebSecurityConfig {
 	
 	private ApplicationContext ctx;
 	
+	@Autowired
+	JwtFilter jwtFilter;
+	
 	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
+	protected AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
+	}
+	
+	@Bean
+	protected WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring().requestMatchers(
 				new AntPathRequestMatcher("/h2-console/**"));
 	}
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
+		http.csrf(csrf -> csrf.ignoringRequestMatchers( "/userDetailsForDoor"));
 		http.authorizeHttpRequests(authorize -> {	
 			authorize.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
+			authorize.requestMatchers("/userDetailsForDoor","/test").permitAll();
 			authorize.requestMatchers("/actuator/**","/h2-console/**").permitAll();
 			authorize.requestMatchers("/images/**").permitAll();
 			authorize.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
@@ -50,12 +62,13 @@ public class WebSecurityConfig {
 		http.logout(logout -> logout.permitAll());
 		http.formLogin(form -> form.loginPage("/loginPage").defaultSuccessUrl("/hello", true).permitAll());
 		http.headers(headers -> headers.disable());
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
     
     // The rest is for Unicode
     @Bean
-    public SpringResourceTemplateResolver thymeleafTemplateResolver() {
+    protected SpringResourceTemplateResolver thymeleafTemplateResolver() {
 
         final SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setApplicationContext(this.ctx);
@@ -69,7 +82,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public ISpringWebFluxTemplateEngine thymeleafTemplateEngine() {
+    protected ISpringWebFluxTemplateEngine thymeleafTemplateEngine() {
         // We override here the SpringTemplateEngine instance that would otherwise be
         // instantiated by
         // Spring Boot because we want to apply the SpringWebFlux-specific context
@@ -80,7 +93,7 @@ public class WebSecurityConfig {
     }
     
     @Bean
-    public ThymeleafViewResolver  thymeleafViewResolver(){
+    protected ThymeleafViewResolver  thymeleafViewResolver(){
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(thymeleafTemplateEngine());
         viewResolver.setCharacterEncoding("UTF-8");

@@ -5,17 +5,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
-import com.bbs.entites.UserDetails;
+import com.bbs.entites.BBSUserDetails;
 import com.bbs.services.DetailsService;
 import com.bbs.services.LastReadMessageServiceImpl;
 import com.bbs.services.MessageForumService;
@@ -24,6 +21,7 @@ import com.bbs.utilities.MenuUtilities;
 import com.bbs.utilities.MessageUtilities;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
@@ -49,7 +47,7 @@ public class MessageController {
 			@RequestParam(required = false, defaultValue="") String nextMessageId,
 			@RequestParam(required = false, defaultValue="") String prevForumId,
 			@RequestParam(required = false, defaultValue="") String prevMessageId,
-			Model model, HttpServletRequest request) {
+			Model model, HttpServletRequest request, HttpSession session) {
 		
 		// Cleansing data, removing non-numerics from String
 		messageId=messageId.replaceAll("[^0-9]", "");
@@ -122,7 +120,7 @@ public class MessageController {
 			@RequestParam(required = true) String newTitle,
 			@RequestParam(required = true) String newMessageText,
 			@RequestParam(required = true) String lastReadMessageId,
-			Model model, HttpServletRequest request) {
+			Model model, HttpServletRequest request, HttpSession session) {
 		System.out.println("userDetailsId: "+userDetailsId);
 		System.out.println("messageForumId: "+messageForumId);
 		System.out.println("lastReadMessageId: "+lastReadMessageId);
@@ -140,7 +138,7 @@ public class MessageController {
 		
 		if (!messageForumId.isBlank() && !userDetailsId.isBlank() && !newMessageText.isBlank() &&!newTitle.isBlank()) {			
 			Optional<MessageForum> forum = mfService.findById(new BigInteger(messageForumId));
-			Optional<UserDetails> user = udService.findById(new BigInteger(userDetailsId));
+			Optional<BBSUserDetails> user = udService.findById(new BigInteger(userDetailsId));
 		
 			if (forum.isPresent() && user.isPresent()) {
 					Message message = new Message();
@@ -148,7 +146,7 @@ public class MessageController {
 					message.setTimestamp(LocalDateTime.now());
 					message.setTitle(newTitle);
 					message.setMessageForum(forum.get());
-					message.setUserDetails(user.get());
+					message.setBbsUserDetails(user.get());
 					message=mService.save(message);
 
 					model.addAttribute("userDetailsId",userDetailsId);

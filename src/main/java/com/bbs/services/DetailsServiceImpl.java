@@ -10,10 +10,15 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.bbs.entites.UserDetails;
+import com.bbs.entites.BBSUserDetails;
+import com.bbs.entites.User;
+import com.bbs.entites.UserPrincipal;
 import com.bbs.repos.DetailsRepository;
+import com.bbs.repos.UsersRepository;
 import com.bbs.utilities.ImageUtilities;
 
 @Service
@@ -22,19 +27,22 @@ public class DetailsServiceImpl implements DetailsService {
 	@Autowired
 	private DetailsRepository repo;
 	
+	@Autowired
+	private UsersRepository userRepo;
+	
 
 	@Override
-	public Optional<UserDetails> findByUsername(String username) {
+	public Optional<BBSUserDetails> findByUsername(String username) {
 		return repo.findOptionalByUsername(username);
 	}
 	
 	@Override
-	public Optional<UserDetails> findById(BigInteger id) {
+	public Optional<BBSUserDetails> findById(BigInteger id) {
 		return repo.findById(id);
 	}
 
 	@Override
-	public UserDetails save(UserDetails details) {
+	public BBSUserDetails save(BBSUserDetails details) {
 		
 		if (details.getPhoto() == null) {
 			try {
@@ -51,7 +59,7 @@ public class DetailsServiceImpl implements DetailsService {
 	}
 
 	@Override
-	public List<UserDetails> findAll() {
+	public List<BBSUserDetails> findAll() {
 		return repo.findAll();
 	}
 
@@ -60,5 +68,16 @@ public class DetailsServiceImpl implements DetailsService {
 		String username = repo.findUsernameByDoorId(doorId);
 		return username != null? username:"";
 	}
+
+	@Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            System.out.println("User Not Found");
+            throw new UsernameNotFoundException("user not found");
+        }
+        
+        return new UserPrincipal(user);
+    }
 
 }

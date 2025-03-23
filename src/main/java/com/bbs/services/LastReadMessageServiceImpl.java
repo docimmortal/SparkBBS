@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bbs.repos.LastReadMessageRepo;
+import com.bbs.repos.LastReadMessageRepository;
 
 @Service
 public class LastReadMessageServiceImpl implements LastReadMessageService {
 
 	@Autowired
-	private LastReadMessageRepo repo;
+	private LastReadMessageRepository repo;
 	
 	@Override
 	public BigInteger[] getNextForumWithUnreadMessages(BigInteger userDetailsId, BigInteger forumId) {

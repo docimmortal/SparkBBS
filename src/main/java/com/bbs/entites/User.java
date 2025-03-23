@@ -1,13 +1,13 @@
 package com.bbs.entites;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +19,8 @@ import lombok.Setter;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private BigInteger id;
 	
-	@Column
+	@Id
     private String username;
 	
 	@Column
@@ -32,6 +28,9 @@ public class User implements Serializable {
 	
 	@Column
     private boolean enabled;
+	
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Authority> authorities;
 
     public User(String username, String password, boolean enabled) {
 		super();

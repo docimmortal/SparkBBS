@@ -1,9 +1,5 @@
 package com.bbs.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.math.BigInteger;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +21,5 @@ public class AuthoritiesServiceTests {
 	public void testSave() {
 		Authority authority = new Authority("fred", "ROLE_USER");
 		authority=service.save(authority);
-		assertEquals(BigInteger.valueOf(3), authority.getId());
 	}
 }

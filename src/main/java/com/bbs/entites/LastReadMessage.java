@@ -22,7 +22,7 @@ public class LastReadMessage {
     private BigInteger id;
 	
 	@ManyToOne
-	private UserDetails userDetails;
+	private BBSUserDetails userDetails;
 	
 	@ManyToOne
 	private MessageForum messageForum;

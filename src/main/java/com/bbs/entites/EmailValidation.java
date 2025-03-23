@@ -2,41 +2,38 @@ package com.bbs.entites;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-
-import com.bbs.enums.ReactionType;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="Reactions")
+@Table (name="Email_Validations")
 @Getter @Setter @NoArgsConstructor 
-public class Reaction  implements Serializable {
+public class EmailValidation implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private BigInteger id;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="reaction_type")
-	private ReactionType reactionType;
+	@Column
+	private String email;
 	
-	@ManyToOne
-	private BBSUserDetails userDetails;
+	@Column(name="code_key")
+	private String codeKey;
 	
-	@ManyToOne
-	private Message message;
+	@Column(name="date_sent")
+	private LocalDateTime dateSent;
 	
+	@Column
+	private boolean validated;
 }
