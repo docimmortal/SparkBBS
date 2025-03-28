@@ -36,7 +36,8 @@ public class EmailValidationTests {
 	public void testKeyMatches() {
 		repo.save(createEmailValidation("bob@smith.com","abc124",false));
 
-		Boolean results = repo.checkKey("bob@smith.com","abc124");
+		LocalDateTime nowMinus15 = LocalDateTime.now().minusMinutes(15);
+		Boolean results = repo.checkKey("bob@smith.com","abc124", nowMinus15);
 		assertTrue(results);
 	}
 	
@@ -44,15 +45,16 @@ public class EmailValidationTests {
 	public void testKeyMatchesIgnoringCase() {
 		repo.save(createEmailValidation("rob@smith.com","abc333",false));
 
-		Boolean results = repo.checkKey("ROB@SMITH.COM","abc333");
+		LocalDateTime nowMinus15 = LocalDateTime.now().minusMinutes(15);
+		Boolean results = repo.checkKey("ROB@SMITH.COM","abc333", nowMinus15);
 		assertTrue(results);
 	}
 	
 	@Test
 	public void testKeyDoesNotMatch() {
 		repo.save(createEmailValidation("bob@smith.com","abc123",false));
-
-		Boolean results = repo.checkKey("bob@smith.com","abc111");
+		LocalDateTime nowMinus15 = LocalDateTime.now().minusMinutes(15);
+		Boolean results = repo.checkKey("bob@smith.com","abc111", nowMinus15);
 		assertFalse(results);
 	}
 	
@@ -60,7 +62,17 @@ public class EmailValidationTests {
 	public void testEmailDoesNotMatch() {
 		repo.save(createEmailValidation("bob@smith.com","abc124",false));
 
-		Boolean results = repo.checkKey("bobby@smith.com","abc124");
+		LocalDateTime nowMinus15 = LocalDateTime.now().minusMinutes(15);
+		Boolean results = repo.checkKey("bobby@smith.com","abc124", nowMinus15);
+		assertFalse(results);
+	}
+	
+	@Test
+	public void testKeyMatchesButExpired() {
+		repo.save(createEmailValidation("bob@smith.com","abc124",false));
+
+		LocalDateTime nowPlusOne = LocalDateTime.now().plusMinutes(1);
+		Boolean results = repo.checkKey("bob@smith.com","abc124", nowPlusOne);
 		assertFalse(results);
 	}
 	
@@ -75,7 +87,8 @@ public class EmailValidationTests {
 				results = repo.countByEmailIgnoreCase("BOBBY@SMITH.COM");
 				assertEquals(0,results);
 				repo.save(createEmailValidation("bobby@smith.com","abc999",false));
-				Boolean exists = repo.existsByEmailIgnoreCaseAndCodeKeyIgnoreCase("bobby@smith.com","abc999");
+				LocalDateTime nowMinus15 = LocalDateTime.now().minusMinutes(15);
+				Boolean exists = repo.checkKey("bobby@smith.com","abc999", nowMinus15);
 				assertTrue(exists);
 			} else {
 				assertTrue(false);
