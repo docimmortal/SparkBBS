@@ -16,6 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import com.bbs.entites.BBSUserDetails;
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
+import com.bbs.entites.YoutubeVideo;
 
 import jakarta.transaction.Transactional;
 
@@ -133,5 +134,16 @@ public class MessageServiceTest {
 		assertNotNull(detail);
 		MessageForum forum = message.getMessageForum();
 		assertNotNull(forum);
+	}
+	
+	@Test
+	@Transactional
+	public void testVideoFound() {
+		Optional<Message> optional = service.findById(BigInteger.valueOf(3));
+		assertTrue(optional.isPresent());
+		Message m = optional.get();
+		assertNotNull(m.getYoutubeVideo());
+		YoutubeVideo video = m.getYoutubeVideo();
+		assertEquals("a_iij12svL0",video.getEndpoint());
 	}
 }

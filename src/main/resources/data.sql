@@ -19,8 +19,12 @@ INSERT INTO Messages(title, message, timestamp, bbs_user_details_id, message_for
 INSERT INTO Messages(title, message, timestamp, bbs_user_details_id, message_forum_id) values 
 	('Test 2',CAST('This is another test message.' AS CLOB),'2025-01-03 13:05:12',2,1);
 INSERT INTO Messages(title, message, timestamp, bbs_user_details_id, message_forum_id) values 
-	('Ha ha!',CAST('This is another new message.' AS CLOB),'2025-01-01 09:20:34',1,3);
+	('Can you guess the video games?',CAST('The hillarious Bec Hill!!!' AS CLOB),'2025-01-01 09:20:34',1,3);
 INSERT INTO Messages(title, message, timestamp, bbs_user_details_id, message_forum_id) values 
 	('Test 3',CAST('This message is out of order.' AS CLOB),'2025-01-05 11:08:02',1,1);
+	
+INSERT INTO Youtube_Videos(video_embed_endpoint, message_id) values ('a_iij12svL0',3);
+
+UPDATE Messages set youtube_video_id=1 where id=3;
 	
 INSERT INTO Last_Read_Messages(bbs_user_details_id, message_forum_id , message_id) values (1,1,1);

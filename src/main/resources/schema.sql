@@ -45,11 +45,22 @@ CREATE TABLE Messages(
 	message CLOB,
 	bbs_user_details_id bigint NOT NULL,
 	message_forum_id bigint NOT NULL,
+	youtube_video_id bigint,
 	timestamp TIMESTAMP,
 	PRIMARY KEY(id),
 	foreign key(bbs_user_details_id) references BBS_User_Details(id),
 	foreign key(message_forum_id) references Message_Forums(id)
 );
+
+CREATE TABLE Youtube_Videos(
+	id bigint NOT NULL AUTO_INCREMENT,
+	video_embed_endpoint VARCHAR(20),
+	message_id bigint NOT NULL,
+	PRIMARY KEY(id),
+	foreign key(message_id) references Messages(id)
+);
+
+ALTER TABLE Messages ADD FOREIGN KEY(youtube_video_id) references Youtube_Videos(id);
 
 CREATE TABLE Last_Read_Messages(
 	id bigint NOT NULL AUTO_INCREMENT,

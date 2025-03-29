@@ -6,12 +6,15 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.Nationalized;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +46,10 @@ public class Message implements Serializable{
 	
 	@ManyToOne
 	private MessageForum messageForum;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "youtube_video_id", referencedColumnName = "id")
+	private YoutubeVideo youtubeVideo;
 	
 	//@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true, mappedBy="message")
 	//private List<Reply> replies;

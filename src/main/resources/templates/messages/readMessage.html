@@ -44,7 +44,11 @@
 			<label class="w3-theme" for="timestamp">Date</label><input type="text" name="timestamp" id="timestamp" th:value="${#temporals.format(message.timestamp,'MM/dd/yyyy hh:mm a')}" readonly><br>
 	
 		
-			<textarea class="message mainMessage" th:field="${message.message}" name="messageText" readonly></textarea><br>
+			<textarea class="message mainMessage autoresizing" th:field="${message.message}" name="messageText" readonly></textarea><br>
+			<div th:if="${message.youtubeVideo != null}">
+				<iframe class="videoIndent" width="640" height="390" th:src="@{https://www.youtube.com/embed/__${message.youtubeVideo.endpoint}__}" 
+				frameborder="0" alt="video attached" allowfullscreen="1"></iframe>
+			</div> 
 		</div>
 		<!--  END if we have a message  -->
 		
