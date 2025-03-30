@@ -19,5 +19,9 @@
 		<div><label>Password: <input type="password" name="password" placeholder="Password"></label></div>
 		<div><input class="w3-theme" type="submit" value="Log In"></div>
 	</form>
+	
+	<form th:action="@{/newUserPage}" method="get">
+		<div><input type="submit" value="Create a new account"></div>
+	</form>
 </body>
 </html>

@@ -8,7 +8,7 @@ CREATE TABLE Users(
 CREATE TABLE Authorities(
 	username VARCHAR(50) unique NOT NULL,
 	authority VARCHAR(50) NOT NULL,
-	foreign key (username) references Users(username)
+	constraint fk_authorities_users foreign key(username) references users(username)
 );
 
 create unique index ix_auth_username on authorities (username,authority);
@@ -22,7 +22,7 @@ create table persistent_logins (
 
 CREATE TABLE BBS_User_Details(
 	id bigint NOT NULL AUTO_INCREMENT,
-	username VARCHAR(50) NOT NULL,
+	username VARCHAR(50) unique NOT NULL,
 	door_id VARCHAR(60) NOT NULL,
 	first_name VARCHAR(60) NOT NULL,
 	last_name VARCHAR(60) NOT NULL,
