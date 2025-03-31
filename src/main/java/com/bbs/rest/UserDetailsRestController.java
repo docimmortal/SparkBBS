@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bbs.services.DetailsService;
+import com.bbs.services.BBSUserDetailsService;
 
 @RestController
 public class UserDetailsRestController {
 
 	@Autowired
-	private DetailsService detailsService;
+	private BBSUserDetailsService detailsService;
 	
-	public UserDetailsRestController(DetailsService detailsService) {
+	public UserDetailsRestController(BBSUserDetailsService detailsService) {
 		this.detailsService=detailsService;
 	}
 	

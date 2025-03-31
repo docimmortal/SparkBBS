@@ -29,7 +29,7 @@ public class MessageServiceTest {
 	private MessageService service;
 	
 	@Autowired
-	private DetailsService dService;
+	private BBSUserDetailsService dService;
 	
 	@Autowired
 	private MessageForumService mfService;

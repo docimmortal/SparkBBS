@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.bbs.entites.BBSUserDetails;
-import com.bbs.services.DetailsService;
+import com.bbs.services.BBSUserDetailsService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ImageController {
 	
 	@Autowired
-	private DetailsService service;
+	private BBSUserDetailsService service;
 
 	@GetMapping("/image/{username}")
 	public void showUserImage(@PathVariable String username,

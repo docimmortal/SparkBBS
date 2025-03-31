@@ -25,10 +25,6 @@ public class Authority implements Serializable{
 	
 	@Id
 	private String authority;
-	
-	@ManyToOne
-    @JoinColumn(name = "username")
-    private User user;
 
 	public Authority(String username, String authority) {
 		super();

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
 import com.bbs.entites.BBSUserDetails;
-import com.bbs.services.DetailsService;
+import com.bbs.services.BBSUserDetailsService;
 import com.bbs.services.LastReadMessageServiceImpl;
 import com.bbs.services.MessageForumService;
 import com.bbs.services.MessageService;
@@ -33,7 +33,7 @@ public class MessageController {
 	private MessageForumService mfService;
 	
 	@Autowired
-	private DetailsService udService;
+	private BBSUserDetailsService udService;
 	
 	@Autowired
 	private LastReadMessageServiceImpl lrmService;

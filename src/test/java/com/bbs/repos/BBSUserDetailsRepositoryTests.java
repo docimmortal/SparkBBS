@@ -16,10 +16,10 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 @SpringBootTest
-public class DetailsRepositoryTests {
+public class BBSUserDetailsRepositoryTests {
 
 	@Autowired
-	private DetailsRepository repo;
+	private BBSUserDetailsRepository repo;
 	
 	@Test
 	public void testFindAll() {

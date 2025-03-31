@@ -10,26 +10,18 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bbs.entites.BBSUserDetails;
-import com.bbs.entites.User;
-import com.bbs.entites.UserPrincipal;
-import com.bbs.repos.DetailsRepository;
-import com.bbs.repos.UsersRepository;
+import com.bbs.repos.BBSUserDetailsRepository;
 import com.bbs.utilities.ImageUtilities;
 
 @Service
-public class DetailsServiceImpl implements DetailsService {
+public class BBSUserDetailsServiceImpl implements BBSUserDetailsService {
 
 	@Autowired
-	private DetailsRepository repo;
-	
-	@Autowired
-	private UsersRepository userRepo;
-	
+	private BBSUserDetailsRepository repo;
 
 	@Override
 	public Optional<BBSUserDetails> findByUsername(String username) {
@@ -70,14 +62,14 @@ public class DetailsServiceImpl implements DetailsService {
 	}
 
 	@Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
-        if (user == null) {
+    public BBSUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       	Optional<BBSUserDetails> optional=repo.findOptionalByUsername(username);
+        if (optional.isEmpty()) {
             System.out.println("User Not Found");
             throw new UsernameNotFoundException("user not found");
         }
         
-        return new UserPrincipal(user);
+        return optional.get();
     }
 
 }

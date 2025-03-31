@@ -27,10 +27,10 @@ import jakarta.transaction.Transactional;
 @Transactional
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class DetailsServiceImplTests {
+public class BBSUserDetailsServiceImplTests {
 
 	@Autowired
-	private DetailsService service;
+	private BBSUserDetailsService service;
 	
 	
 	@Autowired

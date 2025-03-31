@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bbs.entites.Menu;
 import com.bbs.entites.BBSUserDetails;
-import com.bbs.services.DetailsService;
+import com.bbs.services.BBSUserDetailsService;
 import com.bbs.services.JwtService;
 import com.bbs.utilities.MenuUtilities;
 
@@ -26,7 +26,7 @@ public class DoorController {
 	private JwtService jwtService;
 	
 	@Autowired
-	private DetailsService dService;
+	private BBSUserDetailsService dService;
 	
 	@PostMapping("/doorTest")
 	public ModelAndView doorTest(@RequestParam(required=true) String token,
