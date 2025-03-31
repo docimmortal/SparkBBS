@@ -27,6 +27,7 @@ import com.bbs.services.UsersService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UsersController {
@@ -55,35 +56,57 @@ public class UsersController {
 	}
 	
 	@GetMapping("/newUserPage")
-	public String goToNewUserPage() {
+	public String goToNewUserPage( HttpSession session, Model model) {
+		String[] sessionVars = {"error","firstName","lastName","email","username"};
+		for (String var: sessionVars) {
+			model.addAttribute(var, session.getAttribute(var));
+		}
 		return "users/newUser";
 	}
 	
 	@PostMapping("/addUser")
 	public String addUser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String username,
 			@RequestParam String password1, @RequestParam String password2, @RequestParam String email, 
-			HttpServletRequest request, Model model) {
+			HttpServletRequest request, Model model, HttpSession session) {
 		System.out.println("Adding user...");
-		User user = new User(username, passwordEncoder.encode(password1), true);
-		uService.save(user);
-		Authority authority = new Authority(username,"ROLE_USER");
-		aService.save(authority);
+		String url="redirect:/newUserPage";
+		String error=null;
+		// Need to validate password
+		if (password1.length()<10) {
+			error="The password must be at least 10 characters long.";
+		} else if (password1.equals(password2)) {
 		
-		// Generate player ID
-		long now = System.currentTimeMillis();
-        Long number = new Random(now).nextLong();
-		String playerId=number.toString()+username.charAt(0)+firstName.charAt(0)+lastName.charAt(0)+email.charAt(0);
-		playerId =  passwordEncoder.encode(playerId).substring(8);
-		
-		BBSUserDetails details = new BBSUserDetails(username, playerId, firstName, lastName, email);
-		service.save(details);
-
-		try {
-	        request.login(username, password1);
-	    } catch (ServletException e) {
-	        e.printStackTrace();
-	    }
-		return "redirect:/hello";
+			url="redirect:/hello";
+			User user = new User(username, passwordEncoder.encode(password1), true);
+			uService.save(user);
+			Authority authority = new Authority(username,"ROLE_USER");
+			aService.save(authority);
+			
+			// Generate player ID
+			long now = System.currentTimeMillis();
+	        Long number = new Random(now).nextLong();
+			String playerId=number.toString()+username.charAt(0)+firstName.charAt(0)+lastName.charAt(0)+email.charAt(0);
+			playerId =  passwordEncoder.encode(playerId).substring(8);
+			
+			BBSUserDetails details = new BBSUserDetails(username, playerId, firstName, lastName, email);
+			service.save(details);
+	
+			try {
+		        request.login(username, password1);
+		    } catch (ServletException e) {
+		        e.printStackTrace();
+		    }
+		} else {
+			error="Passwords do not match!";
+		}
+		if (error !=null) {
+			session.setAttribute("error", error);
+			session.setAttribute("username", username);
+			session.setAttribute("firstName",firstName);
+			session.setAttribute("lastName",lastName);
+			session.setAttribute("email",email);
+		}
+		return url;
 	}
 	
 	public void authWithAuthManager(HttpServletRequest request, String username, String password) {
