@@ -74,7 +74,7 @@ public class MessageServiceTest {
 	@Test
 	@Transactional
 	public void testSave() {
-		Message message = new Message("The Title","This is a test", author, forum);
+		Message message = new Message("The Title","This is a test", author, forum, null);
 		message = service.save(message);
 		assertNotNull(message.getId());
 		System.out.println("MID: "+message.getId());
@@ -100,7 +100,7 @@ public class MessageServiceTest {
 		Optional<MessageForum> mfOptional = mfService.findById(BigInteger.valueOf(1));
 		assertTrue(mfOptional.isPresent());
 		MessageForum forum1 = mfOptional.get();
-		Message message = new Message("The Title","This is a test", author1, forum1);
+		Message message = new Message("The Title","This is a test", author1, forum1, null);
 		message = service.save(message);
 		assertNotNull(message.getId());
 		assertEquals(BigInteger.valueOf(5), message.getId());

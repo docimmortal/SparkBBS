@@ -1,5 +1,107 @@
 @charset "ISO-8859-1";
 
+*
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
+}
+/*body 
+{
+ display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}*/
+
+/* START LOGIN */
+/*.break {
+  flex-basis: 100%; /* This makes the break element take up the full width 
+  height: 0; /* This makes the break element invisible 
+}*/
+section .signin
+{
+  position: absolute;
+  width: 400px;
+  background: #222;  
+  z-index: 1000;
+  /*flex-wrap: wrap; /*NEW*/
+  /*display: flex;*/
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  border-radius: 4px;
+  box-shadow: 0 15px 35px rgba(0,0,0,9);
+}
+section .signin .content 
+{
+  position: relative;
+  width: 100%;
+  /*display: flex;*/
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
+}
+section .signin .content h2 
+{
+  font-size: 2em;
+  color: #0f0;
+  text-transform: uppercase;
+}
+section .signin .content .form 
+{
+  width: 100%;
+  /*display: flex;*/
+  flex-direction: column;
+  gap: 25px;
+}
+section .signin .content .form .inputBox
+{
+  position: relative;
+  width: 100%;
+}
+section .signin .content .form .inputBox input 
+{
+  position: relative;
+  width: 100%;
+  background: #333;
+  border: none;
+  outline: none;
+  padding: 25px 10px 7.5px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1em;
+}
+section .signin .content .form .inputBox i 
+{
+  position: absolute;
+  left: 0;
+  padding: 15px 10px;
+  font-style: normal;
+  color: #aaa;
+  transition: 0.5s;
+  pointer-events: none;
+}
+.signin .content .form .inputBox input[type="submit"]
+{
+  padding: 10px;
+  background: #0f0;
+  color: #000;
+  font-weight: 600;
+  font-size: 1.35em;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+input[type="submit"]:active
+{
+  opacity: 0.6;
+}
+
+/* END LOGIN */
+
 input {
 	padding: 4px;
 }
@@ -12,6 +114,52 @@ label {
 	border-bottom-left-radius: 10px;
 	text-align: right;
 }
+
+.svg-button svg {
+  width: 25px;
+  height: 25px;
+}
+
+/* MODAL START */
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 1.75em;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* MODAL END */
 
 .autoresizing {
 	display: block;
@@ -101,4 +249,27 @@ table {
 }
 td .odd {
 	background-color: grey;
+}
+
+
+/* phone and tablet */
+@media (max-width: 900px)
+{
+  section div /* was span */
+  {
+    width: calc(10vw - 2px);
+    height: calc(10vw - 2px);
+  }
+  
+  body {
+  	font-size: 2.5em;
+  }
+}
+@media (max-width: 600px)
+{
+  section div /* was span */ 
+  {
+    width: calc(20vw - 2px);
+    height: calc(20vw - 2px);
+  }
 }

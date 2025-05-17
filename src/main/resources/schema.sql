@@ -39,6 +39,12 @@ CREATE TABLE Message_Forums(
 	PRIMARY KEY(id)
 );
 
+CREATE TABLE Youtube_Videos(
+	youtube_video_id bigint NOT NULL AUTO_INCREMENT,
+	video_embed_endpoint VARCHAR(20),
+	PRIMARY KEY(youtube_video_id)
+);
+
 CREATE TABLE Messages(
 	id bigint NOT NULL AUTO_INCREMENT,
 	title VARCHAR(100) NOT NULL,
@@ -52,15 +58,7 @@ CREATE TABLE Messages(
 	foreign key(message_forum_id) references Message_Forums(id)
 );
 
-CREATE TABLE Youtube_Videos(
-	id bigint NOT NULL AUTO_INCREMENT,
-	video_embed_endpoint VARCHAR(20),
-	message_id bigint NOT NULL,
-	PRIMARY KEY(id),
-	foreign key(message_id) references Messages(id)
-);
-
-ALTER TABLE Messages ADD FOREIGN KEY(youtube_video_id) references Youtube_Videos(id);
+ALTER TABLE Messages ADD FOREIGN KEY(youtube_video_id) references Youtube_Videos(youtube_video_id);
 
 CREATE TABLE Last_Read_Messages(
 	id bigint NOT NULL AUTO_INCREMENT,

@@ -9,19 +9,26 @@
 </head>
 <body>
 
-	<div th:if="${param.error}">
+   <div>
+   <div class="signin"> 
+    	<div class="content"> 
+			<div th:if="${param.error}">
 			Invalid username and password.</div>
-	<div th:if="${param.logout}">
+			<div th:if="${param.logout}">
 			You have been logged out.</div>
 			
-	<form th:action="@{/loginPage}" method="post">
-		<div><label>User Name: <input type="text" name="username" autofocus="autofocus" placeholder="Username"></label></div>
-		<div><label>Password: <input type="password" name="password" placeholder="Password"></label></div>
-		<div><input class="w3-theme" type="submit" value="Log In"></div>
-	</form>
-	
-	<form th:action="@{/newUserPage}" method="get">
-		<div><input type="submit" value="Create a new account"></div>
-	</form>
+			<form th:action="@{/loginPage}" method="post">
+				<div><label>User Name: <input type="text" name="username" autofocus="autofocus" placeholder="Username" required></label></div>
+				<div><label>Password: <input type="password" name="password" placeholder="Password" required></label></div>
+				<div><input class="w3-theme" type="submit" value="Log In"></div>
+			</form>
+			</div>
+	</div>
+	</div>
+	<div class="break context">
+		<form th:action="@{/newUserPage}" method="get">
+			<div><input type="submit" value="Create a new account"></div>
+		</form>
+	</div>
 </body>
 </html>

@@ -48,7 +48,7 @@ public class Message implements Serializable{
 	private MessageForum messageForum;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "youtube_video_id", referencedColumnName = "id")
+	@JoinColumn(name = "youtube_video_id")
 	private YoutubeVideo youtubeVideo;
 	
 	//@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true, mappedBy="message")
@@ -57,22 +57,24 @@ public class Message implements Serializable{
 	//@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true, mappedBy="message")
 	//private List<Reaction> reactions;
 	
-	public Message(String title, String message, BBSUserDetails bbsUserDetails, MessageForum messageForum) {
+	public Message(String title, String message, BBSUserDetails bbsUserDetails, MessageForum messageForum, YoutubeVideo youtubeVideo) {
 		this.title = title;
 		this.message = message;
 		this.bbsUserDetails = bbsUserDetails;
 		this.messageForum = messageForum;
 		this.timestamp = LocalDateTime.now();
 		this.messageForum=messageForum;
+		this.youtubeVideo=youtubeVideo;
 	}
 	
-	public Message(String title, String message, LocalDateTime timestamp, BBSUserDetails bbsUserDetails, MessageForum messageForum) {
+	public Message(String title, String message, LocalDateTime timestamp, BBSUserDetails bbsUserDetails, MessageForum messageForum, YoutubeVideo youtubeVideo) {
 		this.title = title;
 		this.message = message;
 		this.bbsUserDetails = bbsUserDetails;
 		this.messageForum = messageForum;
 		this.timestamp = timestamp;
 		this.messageForum=messageForum;
+		this.youtubeVideo=youtubeVideo;
 	}
 
 	@Override

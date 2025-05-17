@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
+import com.bbs.entites.YoutubeVideo;
 import com.bbs.entites.BBSUserDetails;
 import com.bbs.services.BBSUserDetailsService;
+import com.bbs.services.LastReadMessageService;
 import com.bbs.services.LastReadMessageServiceImpl;
 import com.bbs.services.MessageForumService;
 import com.bbs.services.MessageService;
+import com.bbs.services.YoutubeVideoService;
 import com.bbs.utilities.MenuUtilities;
 import com.bbs.utilities.MessageUtilities;
 
@@ -36,7 +39,10 @@ public class MessageController {
 	private BBSUserDetailsService udService;
 	
 	@Autowired
-	private LastReadMessageServiceImpl lrmService;
+	private LastReadMessageService lrmService;
+	
+	@Autowired
+	private YoutubeVideoService ytvService;
 	
 	@PostMapping("/readMessage")
 	public String readMessage(@RequestParam(required=true) String userDetailsId,
@@ -118,7 +124,8 @@ public class MessageController {
 	public String saveMessage(@RequestParam(required=true) String userDetailsId,
 			@RequestParam(required = true) String messageForumId,
 			@RequestParam(required = true) String newTitle,
-			@RequestParam(required = true) String newMessageText,
+			@RequestParam String newMessageText,
+			@RequestParam String newVideoEndpoint,
 			@RequestParam(required = true) String lastReadMessageId,
 			Model model, HttpServletRequest request, HttpSession session) {
 		System.out.println("userDetailsId: "+userDetailsId);
@@ -126,6 +133,7 @@ public class MessageController {
 		System.out.println("lastReadMessageId: "+lastReadMessageId);
 		System.out.println("newTitle: "+newTitle);
 		System.out.println("newMessageText: "+newMessageText);
+		System.out.println("newMessageText: "+newVideoEndpoint);
 		
 		// Cleansing data
 		messageForumId=messageForumId.replaceAll("[^0-9]", "");
@@ -133,6 +141,9 @@ public class MessageController {
 		lastReadMessageId=lastReadMessageId.replaceAll("[^0-9]", "");
 		newTitle = MessageUtilities.cleanMessage(newTitle);
 		newMessageText = MessageUtilities.cleanMessage(newMessageText);
+		if (newVideoEndpoint.length()!=11) {
+			newVideoEndpoint="";
+		}
 		
 		String url="error";
 		
@@ -147,7 +158,29 @@ public class MessageController {
 					message.setTitle(newTitle);
 					message.setMessageForum(forum.get());
 					message.setBbsUserDetails(user.get());
+					System.out.println("Message Save "+message.getId());
+					
+					YoutubeVideo vid = null;
+					if (newVideoEndpoint.length()==11) {
+						vid = new YoutubeVideo();
+						vid.setEndpoint(newVideoEndpoint);
+						message.setYoutubeVideo(vid);
+						//vid=ytvService.save(vid);
+						//System.out.println("Video save");
+						//message.setYoutubeVideo(vid);
+						//vid.getMessage().setId(message.getId());
+						//message=mService.save(message);
+						//vid=ytvService.save(vid);
+						//System.out.println("Message save");
+						//vid.setMessage(message);
+						//vid=ytvService.save(vid);
+						//System.out.println("Video save");
+					}
+
 					message=mService.save(message);
+
+					//message=mService.save(message);
+					//System.out.println("Message Save "+message.getId());
 
 					model.addAttribute("userDetailsId",userDetailsId);
 					System.out.println("lastReadMessageId: "+lastReadMessageId);

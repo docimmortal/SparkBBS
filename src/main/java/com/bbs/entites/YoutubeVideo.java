@@ -22,13 +22,11 @@ public class YoutubeVideo implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="youtube_video_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private BigInteger id;
 	
 	@Column(name="video_embed_endpoint")
 	private String endpoint;
-	
-	@OneToOne(mappedBy = "youtubeVideo")
-	private Message message;
 	
 }
