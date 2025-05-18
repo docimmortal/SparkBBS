@@ -78,27 +78,59 @@
 		</div>
 		<!--  END if we have a message  -->
 		
-		<!-- 
-		<span th:with="count=1, previousValue=null">
-			<span th:each="reaction: ${message.reactions}">
-				<span th:if="${reaction != null}">WE GOT A REACTION!</span>
-				<span th:if="${previousValue != null}">NOT NULL!</span>
-				<span th:if="${previousValue == null}">NULL!</span>
-				<span th:if="${previousValue != null && previousValue != reaction.reactionType.unicode}">
-					<span th:utext="' '+${count} +' '+${reaction.reactionType.unicode}"></span>
-					<span th:with="count=1"></span>
-					<span>HERE</span>
+		<!--  EMOJIS start -->
+			<span th:with="funnyCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).FUNNY]}">
+				<span th:if="${funnyCount != null && funnyCount.size() > 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode + funnyCount.size()}"></span>
 				</span>
-				<span th:if="${previousValue == null || previousValue == reaction.reactionType.unicode}">
-					<span th:with="count=${count + 1}"></span>
+				<span th:if="${funnyCount != null && funnyCount.size() == 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode}"></span>
 				</span>
-				<span th:with="previousValue=${reaction.reactionType.unicode}"></span>
-				<span th:if="${previousValue != null}">NOT NULL!</span>
-				<span th:if="${previousValue == null}">STILL NULL!</span>>
+			</span>	
+			<span th:with="loveCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).LOVE]}">
+				<span th:if="${loveCount != null && loveCount.size() > 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode + loveCount.size()}"></span>
+				</span>
+				<span th:if="${loveCount != null && loveCount.size() == 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode}"></span>
+				</span>
 			</span>
-		</span>
-		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+			<span th:with="likeCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).LIKE]}">
+				<span th:if="${likeCount != null && likeCount.size() > 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode + likeCount.size()}"></span>
+				</span>
+				<span th:if="${likeCount != null && likeCount.size() == 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode}"></span>
+				</span>
+			</span>
+			<span th:with="angryCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).ANGRY]}">
+				<span th:if="${angryCount != null && angryCount.size() > 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode + angryCount.size()}"></span>
+				</span>
+				<span th:if="${angryCount != null && angryCount.size() == 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode}"></span>
+				</span>
+			</span>
+			<span th:with="sadCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).SAD]}">
+				<span th:if="${sadCount != null && sadCount.size() > 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).SAD.unicode + sadCount.size()}"></span>
+				</span>
+				<span th:if="${sadCount != null && sadCount.size() == 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).SAD.unicode}"></span>
+				</span>
+			</span>
+			<span th:with="surprisedCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).SURPRISED]}">
+				<span th:if="${surprisedCount != null && surprisedCount.size() > 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode + surprisedCount.size()}"></span>
+				</span>
+				<span th:if="${surprisedCount != null && surprisedCount.size() == 1}">
+					<span th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode}"></span>
+				</span>
+			</span>
+		<!--  EMOJIS end -->
 
+		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+		<!-- 
 		<button id="mainReplyButton" class="w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
 		
 		<div class="hide inner" id="replyToMain">
@@ -109,8 +141,8 @@
 				<input class="w3-theme" type="submit" value="Save">
 			</form>
 		</div>
-		 -->
-		 
+		  -->
+		  
 	<!--  START Navigation buttons -->
 	<div th:if="${message != null}">
 	<form th:action="@{/readMessage}" method="post" action="">

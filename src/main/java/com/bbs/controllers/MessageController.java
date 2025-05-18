@@ -68,6 +68,8 @@ public class MessageController {
 				", messageForumId: "+messageForumId);
 		
 		model.addAttribute("userDetailsId",userDetailsId);
+		model.addAttribute("previousEmojiValue",null);
+		model.addAttribute("currentEmojiCount",0);
 		BigInteger currentMessageId=null;
 		BigInteger forumId=null;
 		Message message=null;
@@ -165,22 +167,9 @@ public class MessageController {
 						vid = new YoutubeVideo();
 						vid.setEndpoint(newVideoEndpoint);
 						message.setYoutubeVideo(vid);
-						//vid=ytvService.save(vid);
-						//System.out.println("Video save");
-						//message.setYoutubeVideo(vid);
-						//vid.getMessage().setId(message.getId());
-						//message=mService.save(message);
-						//vid=ytvService.save(vid);
-						//System.out.println("Message save");
-						//vid.setMessage(message);
-						//vid=ytvService.save(vid);
-						//System.out.println("Video save");
 					}
 
 					message=mService.save(message);
-
-					//message=mService.save(message);
-					//System.out.println("Message Save "+message.getId());
 
 					model.addAttribute("userDetailsId",userDetailsId);
 					System.out.println("lastReadMessageId: "+lastReadMessageId);

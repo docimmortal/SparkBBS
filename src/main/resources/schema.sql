@@ -32,6 +32,15 @@ CREATE TABLE BBS_User_Details(
 	PRIMARY KEY(id)
 );
 
+CREATE TABLE Reactions(
+	id bigint NOT NULL AUTO_INCREMENT,
+	reaction_type varchar(20) NOT NULL,
+	bbs_user_details_id bigint NOT NULL,
+	message_id bigint,
+	PRIMARY KEY(id),
+	foreign key(bbs_user_details_id) references BBS_User_Details(id)
+);
+
 CREATE TABLE Message_Forums(
 	id bigint NOT NULL AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
@@ -52,13 +61,15 @@ CREATE TABLE Messages(
 	bbs_user_details_id bigint NOT NULL,
 	message_forum_id bigint NOT NULL,
 	youtube_video_id bigint,
-	timestamp TIMESTAMP,
+	timestamp TIMESTAMP NOT NULL,
 	PRIMARY KEY(id),
 	foreign key(bbs_user_details_id) references BBS_User_Details(id),
-	foreign key(message_forum_id) references Message_Forums(id)
+	foreign key(message_forum_id) references Message_Forums(id),
+	foreign key (youtube_video_id) references Youtube_Videos(youtube_video_id)
 );
 
-ALTER TABLE Messages ADD FOREIGN KEY(youtube_video_id) references Youtube_Videos(youtube_video_id);
+ALTER TABLE reactions 
+ADD foreign key(message_id) references Messages(id);
 
 CREATE TABLE Last_Read_Messages(
 	id bigint NOT NULL AUTO_INCREMENT,
