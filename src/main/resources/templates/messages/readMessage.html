@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Hello</title>
+<title>Message Board</title>
 <link th:href="@{/css/styles.css}" rel="stylesheet" />
 <link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
 <link th:href="@{/css/themes/green.css}" rel="stylesheet" />
@@ -28,8 +28,34 @@
 			<input type="hidden" name="userDetailsId" th:value="${#ctx.session.details.id}" readonly>
 			<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}" readonly>
 			<input type="hidden" name="lastReadMessageId" th:value="${message.id}" readonly >
-			<label class="w3-theme" for="newTitle">Title</label><input id="newTitle" type="text" name="newTitle">
-			<textarea id="postmsgId"  class="replyMessage"  name="newMessageText"></textarea><br>
+			<label class="w3-theme" for="newTitle">Title</label><input id="newTitle" type="text" name="newTitle" required>
+			
+			<button class="svg-button" id="youTubeButton" type="button">
+    			<svg version="1.1" id="Layer_1" 
+    				xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 				viewBox="0 0 461.001 461.001" xml:space="preserve">
+					<g>
+				<path style="fill:#F61C0D;" d="M365.257,67.393H95.744C42.866,67.393,0,110.259,0,163.137v134.728
+					c0,52.878,42.866,95.744,95.744,95.744h269.513c52.878,0,95.744-42.866,95.744-95.744V163.137
+					C461.001,110.259,418.135,67.393,365.257,67.393z M300.506,237.056l-126.06,60.123c-3.359,1.602-7.239-0.847-7.239-4.568V168.607
+					c0-3.774,3.982-6.22,7.348-4.514l126.06,63.881C304.363,229.873,304.298,235.248,300.506,237.056z"/>
+					</g>
+				</svg>
+ 			</button>
+ 			<span th:value="${youTubeUrl}"></span>
+ 			<!-- The Modal -->
+				<div id="youTubeModal" class="modal">
+				
+				  <!-- Modal content -->
+				  <div class="modal-content">
+				    <span class="close">&times;</span>
+				    <label for="url">YouTube URL</label><input id="youtubeUrl" name="youtubeUrl" type="text">
+				    <button type="button" id="addVideo">Add video</button>
+				  </div>
+				</div>
+				<!--  was hidden -->
+			<input type="hidden" id="newVideoEndpoint" name="newVideoEndpoint" readonly>
+			<textarea id="postmsgId"  class="replyMessage"  name="newMessageText" required></textarea><br> 
 			<button class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId')">Cancel</button>
 			<input class="w3-theme" type="submit" value="Save">
 		</form>
@@ -44,31 +70,68 @@
 			<label class="w3-theme" for="timestamp">Date</label><input type="text" name="timestamp" id="timestamp" th:value="${#temporals.format(message.timestamp,'MM/dd/yyyy hh:mm a')}" readonly><br>
 	
 		
-			<textarea class="message mainMessage" th:field="${message.message}" name="messageText" readonly></textarea><br>
+			<textarea class="message mainMessage autoresizing" th:field="${message.message}" name="messageText" readonly></textarea><br>
+			<div th:if="${message.youtubeVideo != null}">
+				<iframe class="videoIndent" width="640" height="390" th:src="@{https://www.youtube.com/embed/__${message.youtubeVideo.endpoint}__}" 
+				frameborder="0" alt="video attached" allowfullscreen="1"></iframe>
+			</div> 
 		</div>
 		<!--  END if we have a message  -->
 		
-		<!-- 
-		<span th:with="count=1, previousValue=null">
-			<span th:each="reaction: ${message.reactions}">
-				<span th:if="${reaction != null}">WE GOT A REACTION!</span>
-				<span th:if="${previousValue != null}">NOT NULL!</span>
-				<span th:if="${previousValue == null}">NULL!</span>
-				<span th:if="${previousValue != null && previousValue != reaction.reactionType.unicode}">
-					<span th:utext="' '+${count} +' '+${reaction.reactionType.unicode}"></span>
-					<span th:with="count=1"></span>
-					<span>HERE</span>
+		<!--  EMOJIS start -->
+			<span th:with="funnyCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).FUNNY]}">
+				<span th:if="${funnyCount != null && funnyCount.size() > 1}">
+					<span id="funnyCount" th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode + funnyCount.size()}"></span>
 				</span>
-				<span th:if="${previousValue == null || previousValue == reaction.reactionType.unicode}">
-					<span th:with="count=${count + 1}"></span>
+				<span th:if="${funnyCount != null && funnyCount.size() == 1}">
+					<span id="funnyCount" th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode}"></span>
 				</span>
-				<span th:with="previousValue=${reaction.reactionType.unicode}"></span>
-				<span th:if="${previousValue != null}">NOT NULL!</span>
-				<span th:if="${previousValue == null}">STILL NULL!</span>>
+			</span>	
+			<span th:with="loveCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).LOVE]}">
+				<span th:if="${loveCount != null && loveCount.size() > 1}">
+					<span id="loveCount" th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode + loveCount.size()}"></span>
+				</span>
+				<span th:if="${loveCount != null && loveCount.size() == 1}">
+					<span id="loveCount" th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode}"></span>
+				</span>
 			</span>
-		</span>
-		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+			<span th:with="likeCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).LIKE]}">
+				<span th:if="${likeCount != null && likeCount.size() > 1}">
+					<span id="likeCount" th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode + likeCount.size()}"></span>
+				</span>
+				<span th:if="${likeCount != null && likeCount.size() == 1}">
+					<span id="likeCount" th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode}"></span>
+				</span>
+			</span>
+			<span th:with="angryCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).ANGRY]}">
+				<span th:if="${angryCount != null && angryCount.size() > 1}">
+					<span id="angryCount" th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode + angryCount.size()}"></span>
+				</span>
+				<span th:if="${angryCount != null && angryCount.size() == 1}">
+					<span id="angryCount" th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode}"></span>
+				</span>
+			</span>
+			<span th:with="sadCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).SAD]}">
+				<span th:if="${sadCount != null && sadCount.size() > 1}">
+					<span id = "sadCount" th:text="${T(com.bbs.enums.ReactionType).SAD.unicode + sadCount.size()}"></span>
+				</span>
+				<span th:if="${sadCount != null && sadCount.size() == 1}">
+					<span id = "sadCount" th:text="${T(com.bbs.enums.ReactionType).SAD.unicode}"></span>
+				</span>
+			</span>
+			<span th:with="surprisedCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).SURPRISED]}">
+				<span th:if="${surprisedCount != null && surprisedCount.size() > 1}">
+					<span id="surprisedCount" th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode + surprisedCount.size()}"></span>
+				</span>
+				<span th:if="${surprisedCount != null && surprisedCount.size() == 1}">
+					<span id="surprisedCount" th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode}"></span>
+				</span>
+			</span>
+		<!--  EMOJIS end -->
 
+		<span id="reaction1"></span>
+		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+		<!-- 
 		<button id="mainReplyButton" class="w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
 		
 		<div class="hide inner" id="replyToMain">
@@ -79,10 +142,9 @@
 				<input class="w3-theme" type="submit" value="Save">
 			</form>
 		</div>
-		 -->
-		 
+		  -->
+		  
 	<!--  START Navigation buttons -->
-	<!-- <form th:action="@{/navigate}" method="post" action=""> -->
 	<div th:if="${message != null}">
 	<form th:action="@{/readMessage}" method="post" action="">
 		<input type="hidden" name="messageId" th:value="${message.id}">
@@ -116,6 +178,50 @@
 	<div id="footer" th:insert="~{fragments/footer :: footer}"></div>
 	
 	<script>
+		// Modal START
+		var modal = document.getElementById("youTubeModal");
+		var btn = document.getElementById("youTubeButton");
+		var addBtn = document.getElementById("addVideo");
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+
+		// When the user clicks the button, open the modal 
+		btn.onclick = function() {
+		  modal.style.display = "block";
+		}
+		
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+		
+		addBtn.onclick = function() {
+			var videoLink = document.getElementById("youtubeUrl").value;
+			if (videoLink.startsWith("https://www.youtube.com/watch?")) {
+				let video=videoLink.substr(videoLink.lastIndexOf("=") + 1);
+				if (video.length==11) {
+					console.log("==========>video:"+video);
+					document.getElementById("newVideoEndpoint").value=video;
+					let iframe = document.createElement('iframe');
+					iframe.setAttribute("src", "https://www.youtube.com/embed/"+video);
+					iframe.style.width = "640px";
+					iframe.style.height = "390px";
+					let postmsgIdElement = document.getElementById('postmsgId');
+					postmsgIdElement.parentNode.insertBefore(iframe, postmsgIdElement.nextSibling);
+				}
+			}
+			modal.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		// Modal END
+		
 		function toggleReaction(event) {
 			const buttonId = event.target.id;
 			const button = document.getElementById(buttonId);
@@ -123,12 +229,10 @@
 			id = "reaction"+id;
 			const element = document.getElementById(id);
 			if (element.classList.contains('react')) {
-				element.classList.remove(...element.classList);
+				element.classList.remove('react');
 				button.textContent='React';
 			} else {
 				element.classList.add('react');
-				element.classList.add('fa');
-				element.classList.add('fa-heart');
 				button.textContent='Remove reaction';
 			}
 		}

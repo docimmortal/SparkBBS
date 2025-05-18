@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.bbs.entites.BBSUserDetails;
 import com.bbs.enums.ReactionType;
-import com.bbs.services.DetailsService;
+import com.bbs.services.BBSUserDetailsService;
 import com.bbs.utilities.MenuUtilities;
 
 import jakarta.servlet.http.HttpSession;
@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoginController {
 
 	@Autowired
-	private DetailsService service;
+	private BBSUserDetailsService service;
 	
 	// Temp
 
@@ -37,6 +37,7 @@ public class LoginController {
 	// Landing Page
 	@GetMapping("/hello")
 	public String hello(Model model, HttpSession session) throws IOException {
+		System.out.println("=============> Accessing BBS");
 		String username = "Unknown";
 		BBSUserDetails details = new BBSUserDetails();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.bbs.entites.BBSUserDetails;
 
 @Repository
-public interface DetailsRepository extends JpaRepository<BBSUserDetails, BigInteger> {
+public interface BBSUserDetailsRepository extends JpaRepository<BBSUserDetails, BigInteger> {
 
 	public Optional<BBSUserDetails> findOptionalByUsername(String username);
 	

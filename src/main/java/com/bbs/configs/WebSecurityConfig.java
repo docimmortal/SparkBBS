@@ -50,7 +50,7 @@ public class WebSecurityConfig {
 		http.csrf(csrf -> csrf.ignoringRequestMatchers( "/userDetailsForDoor"));
 		http.authorizeHttpRequests(authorize -> {	
 			authorize.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
-			authorize.requestMatchers("/userDetailsForDoor","/test").permitAll();
+			authorize.requestMatchers("/userDetailsForDoor","/test","/newUserPage","/addUser").permitAll();
 			authorize.requestMatchers("/actuator/**","/h2-console/**").permitAll();
 			authorize.requestMatchers("/images/**").permitAll();
 			authorize.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");

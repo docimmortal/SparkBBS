@@ -3,17 +3,11 @@ package com.bbs.entites;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-import com.bbs.enums.ReactionType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -21,26 +15,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="Reactions")
+@Table(name = "Youtube_Videos")
 @Getter @Setter @NoArgsConstructor 
-public class Reaction  implements Serializable {
+public class YoutubeVideo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="youtube_video_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private BigInteger id;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="reaction_type")
-	private ReactionType reactionType;
-	
-	@OneToOne
-	@JoinColumn(name = "id")
-	private BBSUserDetails userDetails;
-	
-	@ManyToOne
-	private Message message;
-
+	@Column(name="video_embed_endpoint")
+	private String endpoint;
 	
 }

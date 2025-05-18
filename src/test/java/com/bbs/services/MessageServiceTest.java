@@ -16,6 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import com.bbs.entites.BBSUserDetails;
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
+import com.bbs.entites.YoutubeVideo;
 
 import jakarta.transaction.Transactional;
 
@@ -28,7 +29,7 @@ public class MessageServiceTest {
 	private MessageService service;
 	
 	@Autowired
-	private DetailsService dService;
+	private BBSUserDetailsService dService;
 	
 	@Autowired
 	private MessageForumService mfService;
@@ -73,7 +74,7 @@ public class MessageServiceTest {
 	@Test
 	@Transactional
 	public void testSave() {
-		Message message = new Message("The Title","This is a test", author, forum);
+		Message message = new Message("The Title","This is a test", author, forum, null);
 		message = service.save(message);
 		assertNotNull(message.getId());
 		System.out.println("MID: "+message.getId());
@@ -99,7 +100,7 @@ public class MessageServiceTest {
 		Optional<MessageForum> mfOptional = mfService.findById(BigInteger.valueOf(1));
 		assertTrue(mfOptional.isPresent());
 		MessageForum forum1 = mfOptional.get();
-		Message message = new Message("The Title","This is a test", author1, forum1);
+		Message message = new Message("The Title","This is a test", author1, forum1, null);
 		message = service.save(message);
 		assertNotNull(message.getId());
 		assertEquals(BigInteger.valueOf(5), message.getId());
@@ -133,5 +134,16 @@ public class MessageServiceTest {
 		assertNotNull(detail);
 		MessageForum forum = message.getMessageForum();
 		assertNotNull(forum);
+	}
+	
+	@Test
+	@Transactional
+	public void testVideoFound() {
+		Optional<Message> optional = service.findById(BigInteger.valueOf(3));
+		assertTrue(optional.isPresent());
+		Message m = optional.get();
+		assertNotNull(m.getYoutubeVideo());
+		YoutubeVideo video = m.getYoutubeVideo();
+		assertEquals("a_iij12svL0",video.getEndpoint());
 	}
 }

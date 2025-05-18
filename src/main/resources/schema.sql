@@ -8,7 +8,7 @@ CREATE TABLE Users(
 CREATE TABLE Authorities(
 	username VARCHAR(50) unique NOT NULL,
 	authority VARCHAR(50) NOT NULL,
-	foreign key (username) references Users(username)
+	constraint fk_authorities_users foreign key(username) references users(username)
 );
 
 create unique index ix_auth_username on authorities (username,authority);
@@ -22,7 +22,7 @@ create table persistent_logins (
 
 CREATE TABLE BBS_User_Details(
 	id bigint NOT NULL AUTO_INCREMENT,
-	username VARCHAR(50) NOT NULL,
+	username VARCHAR(50) unique NOT NULL,
 	door_id VARCHAR(60) NOT NULL,
 	first_name VARCHAR(60) NOT NULL,
 	last_name VARCHAR(60) NOT NULL,
@@ -32,11 +32,26 @@ CREATE TABLE BBS_User_Details(
 	PRIMARY KEY(id)
 );
 
+CREATE TABLE Reactions(
+	id bigint NOT NULL AUTO_INCREMENT,
+	reaction_type varchar(20) NOT NULL,
+	bbs_user_details_id bigint NOT NULL,
+	message_id bigint,
+	PRIMARY KEY(id),
+	foreign key(bbs_user_details_id) references BBS_User_Details(id)
+);
+
 CREATE TABLE Message_Forums(
 	id bigint NOT NULL AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
 	description VARCHAR(1000) NOT NULL,
 	PRIMARY KEY(id)
+);
+
+CREATE TABLE Youtube_Videos(
+	youtube_video_id bigint NOT NULL AUTO_INCREMENT,
+	video_embed_endpoint VARCHAR(20),
+	PRIMARY KEY(youtube_video_id)
 );
 
 CREATE TABLE Messages(
@@ -45,11 +60,16 @@ CREATE TABLE Messages(
 	message CLOB,
 	bbs_user_details_id bigint NOT NULL,
 	message_forum_id bigint NOT NULL,
-	timestamp TIMESTAMP,
+	youtube_video_id bigint,
+	timestamp TIMESTAMP NOT NULL,
 	PRIMARY KEY(id),
 	foreign key(bbs_user_details_id) references BBS_User_Details(id),
-	foreign key(message_forum_id) references Message_Forums(id)
+	foreign key(message_forum_id) references Message_Forums(id),
+	foreign key (youtube_video_id) references Youtube_Videos(youtube_video_id)
 );
+
+ALTER TABLE reactions 
+ADD foreign key(message_id) references Messages(id);
 
 CREATE TABLE Last_Read_Messages(
 	id bigint NOT NULL AUTO_INCREMENT,

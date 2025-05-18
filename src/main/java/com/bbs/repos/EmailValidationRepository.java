@@ -1,6 +1,7 @@
 package com.bbs.repos;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,13 +19,11 @@ public interface EmailValidationRepository extends JpaRepository<EmailValidation
 	@Query("select ev from EmailValidation ev WHERE ev.validated = FALSE")
 	List<EmailValidation> getUnvalidatedEmails();
 	
-	@Query("select case when exists ( select ev from EmailValidation ev where LOWER(ev.email)=LOWER(:email) AND LOWER(ev.codeKey)=LOWER(:codeKey) ) THEN 'TRUE' ELSE 'FALSE' END")
-	Boolean checkKey(String email, String codeKey);
+	@Query("select case when exists ( select ev from EmailValidation ev where LOWER(ev.email)=LOWER(:email) AND LOWER(ev.codeKey)=LOWER(:codeKey) AND ev.dateSent > :nowMinus15) THEN 'TRUE' ELSE 'FALSE' END")
+	Boolean checkKey(String email, String codeKey, LocalDateTime nowMinus15);
 	
 	@Query ("select ev.validated from EmailValidation ev where LOWER(ev.email)=LOWER(:email)")
 	Boolean checkValidated(String email);
-	
-	Boolean existsByEmailIgnoreCaseAndCodeKeyIgnoreCase(String email, String codeKey);
 	
 	Integer countByEmailIgnoreCase(String email);
 	
@@ -36,4 +35,7 @@ public interface EmailValidationRepository extends JpaRepository<EmailValidation
 	@Transactional
 	@Query("update EmailValidation ev set ev.validated=true where LOWER(ev.email)= LOWER(:email) and LOWER(ev.codeKey)=LOWER(:codeKey)")
 	void validateEmail(String email, String codeKey);
+
+	@Query("select ev.codeKey from EmailValidation ev where LOWER(ev.email)=LOWER(:email)")
+	String getCodeKey(String email);
 }

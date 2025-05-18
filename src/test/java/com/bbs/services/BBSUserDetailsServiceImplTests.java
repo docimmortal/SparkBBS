@@ -27,10 +27,10 @@ import jakarta.transaction.Transactional;
 @Transactional
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class DetailsServiceImplTests {
+public class BBSUserDetailsServiceImplTests {
 
 	@Autowired
-	private DetailsService service;
+	private BBSUserDetailsService service;
 	
 	
 	@Autowired
@@ -62,13 +62,19 @@ public class DetailsServiceImplTests {
 	public void testPlayerIdEncryption() {
 		long now = System.currentTimeMillis();
         Long number = new Random(now).nextLong();
-        String username="Joe Cool";
-        String firstName="Joe";
-        String lastName="Cool";
-        String email="joe@king.com";
+        String username="SuzieQ";
+        String firstName="Suzie";
+        String lastName="Quinn";
+        String email="suziequinn@whatever.com";
 		String playerId=number.toString()+username.charAt(0)+firstName.charAt(0)+lastName.charAt(0)+email.charAt(0);
 		playerId =  passwordEncoder.encode(playerId).substring(8);
 		System.out.println(playerId);
+	}
+	
+	@Test
+	public void testStringEncryption() {
+		String encoded=passwordEncoder.encode("SuzieQ");
+		System.out.println(encoded);
 	}
 	
 	@Test

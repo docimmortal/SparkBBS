@@ -30,7 +30,7 @@ public class BBSUserDetails implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private BigInteger id;
 	
-	@Column
+	@Column(unique = true)
 	private String username;
 	
 	@Column(name="door_id")
