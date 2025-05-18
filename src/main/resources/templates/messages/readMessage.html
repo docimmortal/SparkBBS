@@ -81,54 +81,55 @@
 		<!--  EMOJIS start -->
 			<span th:with="funnyCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).FUNNY]}">
 				<span th:if="${funnyCount != null && funnyCount.size() > 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode + funnyCount.size()}"></span>
+					<span id="funnyCount" th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode + funnyCount.size()}"></span>
 				</span>
 				<span th:if="${funnyCount != null && funnyCount.size() == 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode}"></span>
+					<span id="funnyCount" th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode}"></span>
 				</span>
 			</span>	
 			<span th:with="loveCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).LOVE]}">
 				<span th:if="${loveCount != null && loveCount.size() > 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode + loveCount.size()}"></span>
+					<span id="loveCount" th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode + loveCount.size()}"></span>
 				</span>
 				<span th:if="${loveCount != null && loveCount.size() == 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode}"></span>
+					<span id="loveCount" th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode}"></span>
 				</span>
 			</span>
 			<span th:with="likeCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).LIKE]}">
 				<span th:if="${likeCount != null && likeCount.size() > 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode + likeCount.size()}"></span>
+					<span id="likeCount" th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode + likeCount.size()}"></span>
 				</span>
 				<span th:if="${likeCount != null && likeCount.size() == 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode}"></span>
+					<span id="likeCount" th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode}"></span>
 				</span>
 			</span>
 			<span th:with="angryCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).ANGRY]}">
 				<span th:if="${angryCount != null && angryCount.size() > 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode + angryCount.size()}"></span>
+					<span id="angryCount" th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode + angryCount.size()}"></span>
 				</span>
 				<span th:if="${angryCount != null && angryCount.size() == 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode}"></span>
+					<span id="angryCount" th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode}"></span>
 				</span>
 			</span>
 			<span th:with="sadCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).SAD]}">
 				<span th:if="${sadCount != null && sadCount.size() > 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).SAD.unicode + sadCount.size()}"></span>
+					<span id = "sadCount" th:text="${T(com.bbs.enums.ReactionType).SAD.unicode + sadCount.size()}"></span>
 				</span>
 				<span th:if="${sadCount != null && sadCount.size() == 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).SAD.unicode}"></span>
+					<span id = "sadCount" th:text="${T(com.bbs.enums.ReactionType).SAD.unicode}"></span>
 				</span>
 			</span>
 			<span th:with="surprisedCount=${message.reactions.?[reactionType == T(com.bbs.enums.ReactionType).SURPRISED]}">
 				<span th:if="${surprisedCount != null && surprisedCount.size() > 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode + surprisedCount.size()}"></span>
+					<span id="surprisedCount" th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode + surprisedCount.size()}"></span>
 				</span>
 				<span th:if="${surprisedCount != null && surprisedCount.size() == 1}">
-					<span th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode}"></span>
+					<span id="surprisedCount" th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode}"></span>
 				</span>
 			</span>
 		<!--  EMOJIS end -->
 
+		<span id="reaction1"></span>
 		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
 		<!-- 
 		<button id="mainReplyButton" class="w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
@@ -228,12 +229,10 @@
 			id = "reaction"+id;
 			const element = document.getElementById(id);
 			if (element.classList.contains('react')) {
-				element.classList.remove(...element.classList);
+				element.classList.remove('react');
 				button.textContent='React';
 			} else {
 				element.classList.add('react');
-				element.classList.add('fa');
-				element.classList.add('fa-heart');
 				button.textContent='Remove reaction';
 			}
 		}
