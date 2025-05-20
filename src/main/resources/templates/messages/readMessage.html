@@ -21,7 +21,7 @@
 
 	<!--  START if we have a message  -->
 	<h1 th:if="${message != null}" class="w3-container w3-clear w3-theme w3-card" th:text="${message.messageForum.name}"></h1>
-		<button id="postMsgButton" class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId')">Post Message</button>
+		<button id="postMsgButton" class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId','reactButton1')">Post Message</button>
 
 		<div class="hide" id="postMsg">
 		<form th:action="@{/saveMessage}" method="post" action="">
@@ -56,7 +56,7 @@
 				<!--  was hidden -->
 			<input type="hidden" id="newVideoEndpoint" name="newVideoEndpoint" readonly>
 			<textarea id="postmsgId"  class="replyMessage"  name="newMessageText" required></textarea><br> 
-			<button class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId')">Cancel</button>
+			<button class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId','reactButton1')">Cancel</button>
 			<input class="w3-theme" type="submit" value="Save">
 		</form>
 		</div>
@@ -131,6 +131,20 @@
 
 		<span id="reaction1"></span>
 		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+		
+			<!--  react modal -->
+			<div id="reactModal" class="modal-react">
+				  <!-- Modal content -->
+				  <div class="modal-rContent">
+				    <span class="close">&times;</span>
+				    <button type="button" id="addFunny" th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode}"></button>
+				    <button type="button" id="addLove" th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode}"></button>
+				    <button type="button" id="addLike" th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode}"></button>
+				    <button type="button" id="addAngry" th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode}"></button>
+				    <button type="button" id="addSad" th:text="${T(com.bbs.enums.ReactionType).SAD.unicode}"></button>
+				    <button type="button" id="addSurprised" th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode}"></button>
+				  </div>
+			</div>
 		<!-- 
 		<button id="mainReplyButton" class="w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
 		
@@ -178,21 +192,48 @@
 	<div id="footer" th:insert="~{fragments/footer :: footer}"></div>
 	
 	<script>
-		// Modal START
-		var modal = document.getElementById("youTubeModal");
-		var btn = document.getElementById("youTubeButton");
-		var addBtn = document.getElementById("addVideo");
-		// Get the <span> element that closes the modal
-		var span = document.getElementsByClassName("close")[0];
-
-		// When the user clicks the button, open the modal 
-		btn.onclick = function() {
-		  modal.style.display = "block";
+		// START for all Modals
+		
+		// Get the <span> element that closes the modals
+		var span1 = document.getElementsByClassName("close")[0];
+		var span2 = document.getElementsByClassName("close")[1];
+		var rModal = document.getElementById("reactModal");
+		var yModal = document.getElementById("youTubeModal");
+		// When the user clicks on <span> (x), close the modal
+		span1.onclick = function() {
+		  yModal.style.display = "none";
+		}
+		span2.onclick = function() {
+		  rModal.style.display = "none";
+		  const element= document.getElementById('reaction1');
+		  const button=document.getElementById('reactButton1');
+		  element.classList.remove('react');
+		  button.textContent='React';
 		}
 		
-		// When the user clicks on <span> (x), close the modal
-		span.onclick = function() {
-		  modal.style.display = "none";
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == yModal) {
+		    yModal.style.display = "none";
+		  }
+		  if (event.target == rModal) {
+			rModal.style.display = "none";
+			const element= document.getElementById('reaction1');
+			const button=document.getElementById('reactButton1');
+			element.classList.remove('react');
+			button.textContent='React';
+		  }
+		}
+	
+		// END for all Modals
+		
+		// START YouTube Modal
+		var btn = document.getElementById("youTubeButton");
+		var addBtn = document.getElementById("addVideo");
+
+		// When the user clicks the YourTube button, open the modal 
+		btn.onclick = function() {
+		  yModal.style.display = "block";
 		}
 		
 		addBtn.onclick = function() {
@@ -200,7 +241,6 @@
 			if (videoLink.startsWith("https://www.youtube.com/watch?")) {
 				let video=videoLink.substr(videoLink.lastIndexOf("=") + 1);
 				if (video.length==11) {
-					console.log("==========>video:"+video);
 					document.getElementById("newVideoEndpoint").value=video;
 					let iframe = document.createElement('iframe');
 					iframe.setAttribute("src", "https://www.youtube.com/embed/"+video);
@@ -210,18 +250,15 @@
 					postmsgIdElement.parentNode.insertBefore(iframe, postmsgIdElement.nextSibling);
 				}
 			}
-			modal.style.display = "none";
+			yModal.style.display = "none";
 		}
 
-		// When the user clicks anywhere outside of the modal, close it
-		window.onclick = function(event) {
-		  if (event.target == modal) {
-		    modal.style.display = "none";
-		  }
-		}
+		// END YouTube Modal
 		
-		// Modal END
+		// START React Modal
 		
+		// END React Modal
+			
 		function toggleReaction(event) {
 			const buttonId = event.target.id;
 			const button = document.getElementById(buttonId);
@@ -234,14 +271,19 @@
 			} else {
 				element.classList.add('react');
 				button.textContent='Remove reaction';
+				reactModal= document.getElementById('reactModal');
+				rModal.style.display = "block";
 			}
 		}
 		
-		function toggle(event,divId, buttonId, anotherId="") {
+		function toggle(event,divId, buttonId, anotherId="", thirdId="") {
   			var div = document.getElementById(divId);
-  			let div2="";
+  			let div2="", div3="";
   			if (anotherId != "") {
   				div2=document.getElementById(anotherId);
+  			}
+  			if (thirdId != "") {
+  				div3=document.getElementById(thirdId);
   			}
   			var btn = document.getElementById(buttonId);
   			var next = document.getElementById('next');
@@ -250,12 +292,18 @@
   				if (div2!="") {
   					div2.classList.add('hide');
   				}
+  				if (div3!="") {
+  					div3.classList.add('hide');
+  				}
   				btn.classList.add('hide');
   				next.classList.add('hide');
   			} else {
   				div.classList.add('hide');
   				if (div2 != "") {
   					div2.classList.remove('hide');
+  				}
+  				if (div3 != "") {
+  					div3.classList.remove('hide');
   				}
   				btn.classList.remove('hide');
   				next.classList.remove('hide');

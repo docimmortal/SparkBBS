@@ -122,7 +122,7 @@ label {
 
 /* MODAL START */
 /* The Modal (background) */
-.modal {
+.modal, .modal-react {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -136,13 +136,24 @@ label {
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+.modal-react {
+  position: relative;
+  top: -130px;
+  left: -420px;
+  background-color: transparent;
+}
+
 /* Modal Content */
-.modal-content {
+.modal-content, .modal-rContent {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 40%;
+}
+
+.modal-rContent {
+  width: 25%;
 }
 
 /* The Close Button */
@@ -214,10 +225,6 @@ input, button {
   height: 100px;
 }
 
-.mainMessage, .videoIndent {
-  margin-left: 60px;
-}
-
 .firstButton {
   margin-left: 60px;
 }
@@ -229,6 +236,12 @@ input, button {
 .author {
   width: 20%;
 }
+
+#postMsg, #currentMessageId {
+  position: relative;
+  left: 10px;
+}
+
 #title, #newTitle {
   width: 40%;
 }
