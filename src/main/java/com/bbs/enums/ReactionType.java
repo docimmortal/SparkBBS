@@ -1,8 +1,9 @@
 package com.bbs.enums;
 
 public enum ReactionType {
-	FUNNY("\uD83D\uDE00"), LIKE("\u10000\u1FFFF"), ANGRY("\u1F600\u1F64F"), SAD("\u1F600\u1F64F"), 
-	LOVE("\u2764\uFE0F"), SURPRISED("\u1F600\u1F64F"), NONE("");
+	// These are UTF-16 Encoding
+	FUNNY("\uD83D\uDE00"), LOVE("\u2764\uFE0F"), LIKE("\uD83D\uDC4D"), ANGRY("\uD83D\uDE20"), SAD("\uD83D\uDE22"), 
+	SURPRISED("\uD83D\uDE32"), NONE("");
 	
 	private String unicode;
 	
