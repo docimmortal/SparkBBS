@@ -3,7 +3,6 @@ package com.bbs.services;
 import java.math.BigInteger;
 import java.util.Optional;
 
-import com.bbs.entites.Message;
 import com.bbs.entites.YoutubeVideo;
 
 public interface YoutubeVideoService {

@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
+import com.bbs.entites.Reaction;
 import com.bbs.entites.YoutubeVideo;
+import com.bbs.enums.ReactionType;
 import com.bbs.entites.BBSUserDetails;
 import com.bbs.services.BBSUserDetailsService;
 import com.bbs.services.LastReadMessageService;
-import com.bbs.services.LastReadMessageServiceImpl;
 import com.bbs.services.MessageForumService;
 import com.bbs.services.MessageService;
-import com.bbs.services.YoutubeVideoService;
 import com.bbs.utilities.MenuUtilities;
 import com.bbs.utilities.MessageUtilities;
 
@@ -36,13 +36,10 @@ public class MessageController {
 	private MessageForumService mfService;
 	
 	@Autowired
-	private BBSUserDetailsService udService;
+	private BBSUserDetailsService budService;
 	
 	@Autowired
 	private LastReadMessageService lrmService;
-	
-	@Autowired
-	private YoutubeVideoService ytvService;
 	
 	@PostMapping("/readMessage")
 	public String readMessage(@RequestParam(required=true) String userDetailsId,
@@ -151,7 +148,7 @@ public class MessageController {
 		
 		if (!messageForumId.isBlank() && !userDetailsId.isBlank() && !newMessageText.isBlank() &&!newTitle.isBlank()) {			
 			Optional<MessageForum> forum = mfService.findById(new BigInteger(messageForumId));
-			Optional<BBSUserDetails> user = udService.findById(new BigInteger(userDetailsId));
+			Optional<BBSUserDetails> user = budService.findById(new BigInteger(userDetailsId));
 		
 			if (forum.isPresent() && user.isPresent()) {
 					Message message = new Message();
@@ -191,6 +188,81 @@ public class MessageController {
 		}
 
 		return url;
+	}
+	
+	@PostMapping("/saveReaction")
+	public String saveReaction(@RequestParam(required=true) String userDetailsId,
+			@RequestParam(required = true) String lastReadMessageId, 
+			@RequestParam(required = false, defaultValue="") String messageForumId,
+			@RequestParam(required = true) String reaction,
+			Model model, HttpServletRequest request, HttpSession session) {
+		System.out.println("userDetailsId: "+userDetailsId);
+		System.out.println("messageForumId: "+messageForumId);
+		System.out.println("lastReadMessageId: "+lastReadMessageId);
+		System.out.println("Add reaction: "+reaction);
+		
+		// Cleansing data
+		messageForumId=messageForumId.replaceAll("[^0-9]", "");
+		userDetailsId=userDetailsId.replaceAll("[^0-9]", "");
+		lastReadMessageId=lastReadMessageId.replaceAll("[^0-9]", "");
+			
+		// Fetch message
+		String url="messages/readMessage";
+		Optional<Message> origMsg = mService.findById(new BigInteger(lastReadMessageId));
+		if (origMsg.isEmpty()) System.out.println("Message not found?!");
+		Message msg=origMsg.get();
+		
+		// Logic to add another reaction to this message.
+		Optional<BBSUserDetails> userInfo = budService.findById(new BigInteger(userDetailsId));
+		Reaction newReaction = null;
+		if (userInfo.isPresent()) {
+			try {
+				System.out.println("Found the user");
+				ReactionType rt=ReactionType.valueOf(reaction.toUpperCase());
+				System.out.println("Found the reaction type "+rt);
+				newReaction = new Reaction();
+				newReaction.setReactionType(rt);
+				newReaction.setMessage(msg);
+				newReaction.setBbsUserDetails(userInfo.get());
+				msg.getReactions().add(newReaction);
+				msg=mService.save(msg);
+			} catch (IllegalArgumentException e) {
+				// Invalid reaction. Add nothing.
+			}
+		} // else, invalid user. Add nothing.
+		
+		model.addAttribute("message",msg);
+		model.addAttribute("reaction","react "+reaction);
+		setNavigation(userDetailsId,lastReadMessageId, messageForumId, model);	
+		model.addAttribute("menus",MenuUtilities.getMenus());
+		return url;
+	}
+	
+	@PostMapping("/removeReaction")
+	public String removeReaction(@RequestParam(required=true) String userDetailsId,
+			@RequestParam(required = true) String lastReadMessageId, 
+			@RequestParam(required = false, defaultValue="") String messageForumId,
+			@RequestParam(required = true) String reaction,
+			Model model, HttpServletRequest request, HttpSession session) {
+		System.out.println("userDetailsId: "+userDetailsId);
+		System.out.println("messageForumId: "+messageForumId);
+		System.out.println("lastReadMessageId: "+lastReadMessageId);
+		System.out.println("Remove reaction: "+reaction);
+		
+		// Cleansing data
+		messageForumId=messageForumId.replaceAll("[^0-9]", "");
+		userDetailsId=userDetailsId.replaceAll("[^0-9]", "");
+		lastReadMessageId=lastReadMessageId.replaceAll("[^0-9]", "");
+		
+		// TODO, Logic to add another reaction to this message.
+		
+		String url="messages/readMessage";
+		Optional<Message> origMsg = mService.findById(new BigInteger(lastReadMessageId));
+		model.addAttribute("message",origMsg.get());
+		setNavigation(userDetailsId,lastReadMessageId, messageForumId, model);	
+		model.addAttribute("menus",MenuUtilities.getMenus());
+		return url;
+		
 	}
 	
 	private void setNavigation(String detailsId, String currentMessageId, 
