@@ -103,12 +103,14 @@
 				    	<input type="hidden" name="userDetailsId" th:value="${#ctx.session.details.id}" readonly>
 						<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}" readonly>
 						<input type="hidden" name="lastReadMessageId" th:value="${message.id}" readonly >
-				    	<button type="submit" id="addFunny" name="reaction" value="funny" th:text="${T(com.bbs.enums.ReactionType).FUNNY.unicode}"></button>
-				    	<button type="submit" id="addLove" name="reaction" value="love" th:text="${T(com.bbs.enums.ReactionType).LOVE.unicode}"></button>
-				    	<button type="submit" id="addLike" name="reaction" value="like" th:text="${T(com.bbs.enums.ReactionType).LIKE.unicode}"></button>
-				    	<button type="submit" id="addAngry" name="reaction" value="angry" th:text="${T(com.bbs.enums.ReactionType).ANGRY.unicode}"></button>
-				    	<button type="submit" id="addSad" name="reaction" value="sad" th:text="${T(com.bbs.enums.ReactionType).SAD.unicode}"></button>
-				    	<button type="submit" id="addSurprised" name="reaction" value="surprised" th:text="${T(com.bbs.enums.ReactionType).SURPRISED.unicode}"></button>
+				    	<span th:each="reactionType : ${T(com.bbs.enums.ReactionType).values()}">
+				    		<span th:if="${reactionType != T(com.bbs.enums.ReactionType).NONE}">
+				    			<button type="submit" th:id="'add'+${reactionType.toString().toLowerCase()}"
+				    				name="reaction"
+				    				th:value="${reactionType.toString().toLowerCase()}"
+				    				th:text="${T(com.bbs.enums.ReactionType).__${reactionType}__.unicode}"></button>
+				    		</span>
+				    	</span>
 				    </form>
 				  </div>
 			</div>
