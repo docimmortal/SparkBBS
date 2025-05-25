@@ -31,7 +31,7 @@ public class WebSecurityConfig {
 	private ApplicationContext ctx;
 	
 	@Autowired
-	JwtFilter jwtFilter;
+	private JwtFilter jwtFilter;
 	
 	@Bean
 	protected AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

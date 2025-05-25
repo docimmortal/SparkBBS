@@ -54,6 +54,9 @@ public class BBSUserDetails implements Serializable{
 	
 	@OneToMany(mappedBy="bbsUserDetails",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages;
+	
+	@OneToMany(mappedBy="bbsUserDetails",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+	private List<Reaction> reaction;
 
 	public BBSUserDetails(String username, String playerId, String firstName, String lastName, String email) {
 		this.username = username;
