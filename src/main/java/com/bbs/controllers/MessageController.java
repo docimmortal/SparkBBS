@@ -3,6 +3,7 @@ package com.bbs.controllers;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -71,6 +72,8 @@ public class MessageController {
 		BigInteger forumId=null;
 		Message message=null;
 		
+		BigInteger uid = new BigInteger(userDetailsId);
+		
 		// First time hitting the readMessage logic, look for an unread message
 		if (messageForumId.isBlank()) {
 			System.out.println("Looking for next unread message for userId:"+userDetailsId);
@@ -109,10 +112,16 @@ public class MessageController {
 			if (message == null) {
 				System.out.println("ERROR: Message is null!");
 			} else {
+				
+			
 				BigInteger detailsId = new BigInteger(userDetailsId);
 				setNavigation(detailsId,message.getId(), message.getMessageForum().getId(), model);			
 			}
 			model.addAttribute("message",message);
+			long count=message.getReactions().stream().filter(r -> 
+				r.getBbsUserDetails().getId().equals(uid)).count();
+			System.out.println("readMessage - reaction check: "+count);
+			model.addAttribute("reactionAdded",count==1);
 		}
 
 		model.addAttribute("menus",MenuUtilities.getMenus());
@@ -148,7 +157,8 @@ public class MessageController {
 		
 		if (!messageForumId.isBlank() && !userDetailsId.isBlank() && !newMessageText.isBlank() &&!newTitle.isBlank()) {			
 			Optional<MessageForum> forum = mfService.findById(new BigInteger(messageForumId));
-			Optional<BBSUserDetails> user = budService.findById(new BigInteger(userDetailsId));
+			BigInteger uid = new BigInteger(userDetailsId);
+			Optional<BBSUserDetails> user = budService.findById(uid);
 		
 			if (forum.isPresent() && user.isPresent()) {
 					Message message = new Message();
@@ -172,7 +182,14 @@ public class MessageController {
 					System.out.println("lastReadMessageId: "+lastReadMessageId);
 
 					Optional<Message> origMsg = mService.findById(new BigInteger(lastReadMessageId));
-					model.addAttribute("message",origMsg.get());
+					Message msg = origMsg.get();
+					model.addAttribute("message",msg);
+					// Check to see if the user already reacted to this message
+					
+					long count=msg.getReactions().stream().filter(r -> 
+						r.getBbsUserDetails().getId().equals(uid)).count();
+					model.addAttribute("reactionAdded",count==1);
+					// Navigation and menu
 					setNavigation(userDetailsId,lastReadMessageId, messageForumId, model);	
 					model.addAttribute("menus",MenuUtilities.getMenus());
 					url="messages/readMessage";
@@ -212,19 +229,30 @@ public class MessageController {
 		if (origMsg.isEmpty()) System.out.println("Message not found?!");
 		Message msg=origMsg.get();
 		
-		// Logic to add another reaction to this message.
+		// Logic to add another reaction to this message (or remove a reaction).
 		Optional<BBSUserDetails> userInfo = budService.findById(new BigInteger(userDetailsId));
 		Reaction newReaction = null;
 		if (userInfo.isPresent()) {
 			try {
 				System.out.println("Found the user");
-				ReactionType rt=ReactionType.valueOf(reaction.toUpperCase());
-				System.out.println("Found the reaction type "+rt);
-				newReaction = new Reaction();
-				newReaction.setReactionType(rt);
-				newReaction.setMessage(msg);
-				newReaction.setBbsUserDetails(userInfo.get());
-				msg.getReactions().add(newReaction);
+				if (reaction.equalsIgnoreCase("NONE")) {
+					// Remove reaction
+					BigInteger id = userInfo.get().getId();
+					msg.setReactions(msg.getReactions().stream().filter(r -> 
+						!r.getBbsUserDetails().getId().equals(id)
+					).collect(Collectors.toList()));
+					model.addAttribute("reactionAdded",false);
+				} else {
+					// Add reaction
+					ReactionType rt=ReactionType.valueOf(reaction.toUpperCase());
+					System.out.println("Found the reaction type "+rt);
+					newReaction = new Reaction();
+					newReaction.setReactionType(rt);
+					newReaction.setMessage(msg);
+					newReaction.setBbsUserDetails(userInfo.get());
+					msg.getReactions().add(newReaction);
+					model.addAttribute("reactionAdded",true);
+				}
 				msg=mService.save(msg);
 			} catch (IllegalArgumentException e) {
 				// Invalid reaction. Add nothing.
@@ -233,36 +261,11 @@ public class MessageController {
 		
 		model.addAttribute("message",msg);
 		model.addAttribute("reaction","react "+reaction);
+		
+		// Navigation and menu
 		setNavigation(userDetailsId,lastReadMessageId, messageForumId, model);	
 		model.addAttribute("menus",MenuUtilities.getMenus());
 		return url;
-	}
-	
-	@PostMapping("/removeReaction")
-	public String removeReaction(@RequestParam(required=true) String userDetailsId,
-			@RequestParam(required = true) String lastReadMessageId, 
-			@RequestParam(required = false, defaultValue="") String messageForumId,
-			@RequestParam(required = true) String reaction,
-			Model model, HttpServletRequest request, HttpSession session) {
-		System.out.println("userDetailsId: "+userDetailsId);
-		System.out.println("messageForumId: "+messageForumId);
-		System.out.println("lastReadMessageId: "+lastReadMessageId);
-		System.out.println("Remove reaction: "+reaction);
-		
-		// Cleansing data
-		messageForumId=messageForumId.replaceAll("[^0-9]", "");
-		userDetailsId=userDetailsId.replaceAll("[^0-9]", "");
-		lastReadMessageId=lastReadMessageId.replaceAll("[^0-9]", "");
-		
-		// TODO, Logic to add another reaction to this message.
-		
-		String url="messages/readMessage";
-		Optional<Message> origMsg = mService.findById(new BigInteger(lastReadMessageId));
-		model.addAttribute("message",origMsg.get());
-		setNavigation(userDetailsId,lastReadMessageId, messageForumId, model);	
-		model.addAttribute("menus",MenuUtilities.getMenus());
-		return url;
-		
 	}
 	
 	private void setNavigation(String detailsId, String currentMessageId, 

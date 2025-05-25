@@ -91,9 +91,9 @@
 			</span>
 		<!--  EMOJIS end -->
 
-		<span id="reaction1" th:classappend="${reaction}"></span>
-		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
-		
+		<span th:if="${!reactionAdded}">
+			<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+		</span>
 			<!--  react modal -->
 			<div id="reactModal" class="modal-react">
 				  <!-- Modal content -->
@@ -114,6 +114,19 @@
 				    </form>
 				  </div>
 			</div>
+			
+			<div th:if="${reactionAdded}">
+				<form th:action="@{/saveReaction}" method="post" action="">
+					<input type="hidden" name="userDetailsId" th:value="${#ctx.session.details.id}" readonly>
+					<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}" readonly>
+					<input type="hidden" name="lastReadMessageId" th:value="${message.id}" readonly >
+				
+					<button id="removeReaction"
+						name="reaction" th:value="NONE"
+						class="firstButton w3-theme">Remove reaction</button>
+				</form>
+			</div>
+		
 		<!-- 
 		<button id="mainReplyButton" class="w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
 		
@@ -175,10 +188,6 @@
 		span2.onclick = function() {
 		  console.log("Span2 clicked, set text to React");
 		  rModal.style.display = "none";
-		  const element= document.getElementById('reaction1');
-		  const button=document.getElementById('reactButton1');
-		  element.classList.remove('react');
-		  button.textContent='React';
 		}
 		
 		// When the user clicks anywhere outside of the modal, close it
@@ -189,10 +198,6 @@
 		  if (event.target == rModal) {
 			console.log("Outside reaction modal, set text to React");
 			rModal.style.display = "none";
-			const element= document.getElementById('reaction1');
-			const button=document.getElementById('reactButton1');
-			element.classList.remove('react');
-			button.textContent='React';
 		  }
 		}
 	
@@ -231,22 +236,13 @@
 		// END React Modal
 			
 		function toggleReaction(event) {
-			const buttonId = event.target.id;
-			const button = document.getElementById(buttonId);
-			var id = buttonId.replace(/[a-z]/gi, ''); // remove letters from id
-			id = "reaction"+id;
-			const element = document.getElementById(id);
-			if (element.classList.contains('react')) {
-				element.classList.remove('react');
-				button.textContent='React';
-				console.log("toggleReaction, set text to React");
-			} else {
-				element.classList.add('react');
-				button.textContent='Remove reaction';
-				reactModal= document.getElementById('reactModal');
+			console.log("yModal classes: "+rModal.style.display);
+			if (rModal.style.display != "block") {
 				rModal.style.display = "block";
-				console.log("toggleReaction, set text to Remove reaction");
+			} else {
+				rModal.style.display = "hidden";
 			}
+			
 		}
 		
 		function toggle(event,divId, buttonId, anotherId="", thirdId="") {
